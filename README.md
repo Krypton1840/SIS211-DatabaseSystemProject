@@ -23,7 +23,7 @@
 ### Clinets and drivers page:
 - [ ] Add drivers and their respective buses
 - [ ] View all clients' and drivers' information
-- [ ] Update drivers' accounts
+- [ ] Update drivers' accounts (and commuter buses)
 
 ### Account page:
 - [ ] An admin can view his own profile
@@ -45,3 +45,4 @@
 ### Account page:
 - [ ] A client can view his own profile
 - [ ] A client can update his own profile
+- [ ] Logout

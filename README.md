@@ -19,6 +19,10 @@
 - [ ] View all trip details for all routes
 - [ ] Update trip status (To completed)
 - [ ] Make routes inoperative
+- [ ] Generate a report
+  - Number of clients
+  - Number of trips
+  - Number of drivers and buses
 
 ### Clinets and drivers page:
 - [ ] Add drivers and their respective buses

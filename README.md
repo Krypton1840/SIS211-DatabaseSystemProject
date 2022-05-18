@@ -1,10 +1,11 @@
 # SIS211-Database-System-Project
 
 ## Conceptual data model:
-![Conceptual](https://user-images.githubusercontent.com/64649071/168628851-d0e4e72b-f83c-4660-96d3-1ba6fe475667.PNG)
+![image](https://user-images.githubusercontent.com/64649071/169083126-2909341b-7c2c-402e-8d81-dbae67baad69.png)
 
 ## Physical data model:
-![Physical](https://user-images.githubusercontent.com/64649071/168628794-00e29060-7997-4fcc-9952-133174700eea.PNG)
+![image](https://user-images.githubusercontent.com/64649071/169082924-72dfc667-0dbd-429d-b7bb-88cfe655ec08.png)
+
 
 ## Login and sign up:
 
@@ -19,6 +20,7 @@
 - [ ] View all trip details for all routes
 - [ ] Update trip status (To completed)
 - [ ] Make routes inoperative
+- [ ] Cancel a trip (Delete)
 - [ ] Generate a report
   - Number of clients
   - Number of trips
@@ -50,3 +52,4 @@
 - [ ] A client can view his own profile
 - [ ] A client can update his own profile
 - [ ] Logout
+

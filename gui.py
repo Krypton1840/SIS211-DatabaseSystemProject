@@ -3,7 +3,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Radiobutton, messagebox
-
+from re import *
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
@@ -198,6 +198,7 @@ password_entry_bg = canvas.create_image(
 )
 password_entry = Entry(
     bd=0,
+    show="●",
     bg="#EFEFFF",
     highlightthickness=0
 )
@@ -230,16 +231,46 @@ telephone_entry.place(
 )
 
 
+def checkEmail(input_email_entry):
+    regex_email = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+    if not search(regex_email,input_email_entry):   
+            raise ValueError("Invalid Email!")
 
+def checkName(input_name_entry,name_entry):
+    if not input_name_entry.isalpha():
+        raise ValueError(name_entry+" should be alphabet only!")
+def checkPasswordLength(input_password_entry):
+    if len(input_password_entry)<8:
+        raise ValueError("Password length should be at least 8")
+def checkTelephoneNumber(input_telephone_entry):
+    regex_telephone='^01[0125][0-9]{8}$'
 
+    if input_telephone_entry[0:2] == '+2':
+        input_telephone_entry=input_telephone_entry[2:]
+
+    if not search(regex_telephone,input_telephone_entry):   
+            raise ValueError("Invalid Telephone Number!")
+    
+    
 def signUp():
     first_name=first_name_entry.get()
     last_name=last_name_entry.get()
     email=email_entry.get()
     password=password_entry.get()
     telephone=telephone_entry.get()
-    messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name)
-    print(first_name," ",last_name," ",email," ",password," ",telephone)
+    if not(first_name.strip() and last_name.strip() and email.strip() and password.strip() and telephone.strip()):
+        messagebox.showerror("Sign Up failed","All fields are required!")
+    else:
+        try:
+            checkName(first_name,"First Name")
+            checkName(last_name,"Last Name")
+            checkEmail(email)
+            checkPasswordLength(password)
+            checkTelephoneNumber(telephone)
+            messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name+" "+last_name)
+            print(first_name," ",last_name," ",email," ",password," ",telephone)
+        except ValueError as error_message:
+            messagebox.showerror("Sign Up failed",error_message)
 
 signup_button_image = PhotoImage(
     file=relative_to_assets("signup_button_image.png"))

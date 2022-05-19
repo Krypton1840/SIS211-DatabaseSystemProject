@@ -1,5 +1,14 @@
 from tkinter import messagebox
 from re import *
+import pyodbc 
+
+conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
+                      'SERVER=DESKTOP-ECM83AA;'
+                      'DATABASE=Waddy;'
+                      'Trusted_Connection=yes')
+cursor = conn.cursor()
+
+
 
 def checkEmail(input_email_entry):
     input_email_entry=input_email_entry.lower()
@@ -27,8 +36,6 @@ def checkAll(first_name,last_name,email,password,telephone):
     checkEmail(email)
     checkPasswordLength(password)
     checkTelephoneNumber(telephone)
-    messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name+" "+last_name)
-    print("Log: ",first_name," ",last_name," ",email," ",password," ",telephone)
 
 def signUp(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry):
     first_name=first_name_entry.get()
@@ -41,5 +48,11 @@ def signUp(first_name_entry,last_name_entry,email_entry,password_entry,telephone
     else:
         try:
             checkAll(first_name,last_name,email,password,telephone)
+            messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name+" "+last_name)
+            print("Log: ",first_name," ",last_name," ",email," ",password," ",telephone)
+            cursor.execute(
+                '''INSERT INTO CLIENT(FIRSTNAME,LASTNAME,EMAIL,[PASSWORD],TELEPHONENUM) 
+                   VALUES(?,?,?,?,?);''',first_name,last_name,email,password,telephone)
+            conn.commit()
         except ValueError as error_message:
             messagebox.showerror("Sign Up failed",error_message)

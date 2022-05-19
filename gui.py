@@ -2,7 +2,7 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Radiobutton, messagebox
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -40,7 +40,7 @@ canvas.create_text(
     anchor="nw",
     text="Waddy",
     fill="#000000",
-    font=("Helvetica", 20 * -1)
+    font=("Segoe UI", 20 * -1)
 )
 
 canvas.create_text(
@@ -49,7 +49,7 @@ canvas.create_text(
     anchor="nw",
     text="Sign Up to ",
     fill="#000000",
-    font=("Helvetica", 50 * -1, 'bold')
+    font=("Segoe UI", 50 * -1, 'bold')
 )
 
 canvas.create_text(
@@ -58,7 +58,7 @@ canvas.create_text(
     anchor="nw",
     text="Waddy",
     fill="#000000",
-    font=("Helvetica", 35 * -1)
+    font=("Segoe UI", 35 * -1)
 )
 
 canvas.create_text(
@@ -67,7 +67,7 @@ canvas.create_text(
     anchor="nw",
     text="If you already have an account ",
     fill="#000000",
-    font=("Helvetica", 16 * -1)
+    font=("Segoe UI", 16 * -1)
 )
 
 canvas.create_text(
@@ -76,7 +76,7 @@ canvas.create_text(
     anchor="nw",
     text="You can   Login here !",
     fill="#000000",
-    font=("Helvetica", 16 * -1)
+    font=("Segoe UI", 16 * -1)
 )
 
 
@@ -86,7 +86,7 @@ canvas.create_text(
     anchor="nw",
     text="First Name",
     fill="#A7A2FF",
-    font=("Helvetica", 15 * -1)
+    font=("Segoe UI", 15 * -1)
 )
 
 canvas.create_text(
@@ -95,7 +95,7 @@ canvas.create_text(
     anchor="nw",
     text="Last Name",
     fill="#A7A2FF",
-    font=("Helvetica", 15 * -1)
+    font=("Segoe UI", 15 * -1)
 )
 
 canvas.create_text(
@@ -104,7 +104,7 @@ canvas.create_text(
     anchor="nw",
     text="Email",
     fill="#A7A2FF",
-    font=("Helvetica", 15 * -1)
+    font=("Segoe UI", 15 * -1)
 )
 
 canvas.create_text(
@@ -113,7 +113,7 @@ canvas.create_text(
     anchor="nw",
     text="Password",
     fill="#A7A2FF",
-    font=("Helvetica", 15 * -1)
+    font=("Segoe UI", 15 * -1)
 )
 
 canvas.create_text(
@@ -122,7 +122,7 @@ canvas.create_text(
     anchor="nw",
     text="Telephone Number",
     fill="#A7A2FF",
-    font=("Helvetica", 15 * -1)
+    font=("Segoe UI", 15 * -1)
 )
 
 #---------------------------------
@@ -145,6 +145,7 @@ first_name_entry.place(
     width=393.0,
     height=41.0
 )
+
 
 last_name_entry_image = PhotoImage(
     file=relative_to_assets("last_name_entry_image.png"))
@@ -231,13 +232,22 @@ telephone_entry.place(
 
 
 
+def signUp():
+    first_name=first_name_entry.get()
+    last_name=last_name_entry.get()
+    email=email_entry.get()
+    password=password_entry.get()
+    telephone=telephone_entry.get()
+    messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name)
+    print(first_name," ",last_name," ",email," ",password," ",telephone)
+
 signup_button_image = PhotoImage(
     file=relative_to_assets("signup_button_image.png"))
 signup_button = Button(
     image=signup_button_image,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("signup_button clicked"),
+    command=signUp,
     relief="flat"
 )
 signup_button.place(
@@ -246,6 +256,10 @@ signup_button.place(
     width=409.0,
     height=42.0
 )
+
+
+
+
 
 
 window.resizable(False, False)

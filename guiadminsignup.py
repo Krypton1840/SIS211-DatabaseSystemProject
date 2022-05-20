@@ -2,7 +2,7 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Radiobutton, Toplevel, messagebox,Frame
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Radiobutton, Toplevel, messagebox,Frame,font
 from re import *
 from signup import * 
 OUTPUT_PATH = Path(__file__).parent
@@ -126,6 +126,18 @@ signup_button = Button(image=signup_button_image,borderwidth=0,highlightthicknes
                 )
 
 signup_button.place(x=531.0,y=555.0,width=409.0,height=42.0)
+
+#-----------------------------Go Back [Button]------------------------------------
+def goBackToMenu():
+    window.destroy()
+    import gui
+buttonFont = font.Font(family='Segoe UI', size=14, weight='bold')
+go_back_button = Button(text='Go back to menu',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
+                       command=goBackToMenu,
+                       relief="flat"
+                )
+
+go_back_button.place(x=89.0,y=611,width=160.0,height=42.0)
 
 
 

@@ -39,9 +39,6 @@ canvas.create_text(129.0,284.0,anchor="nw",text="Sign Up to ",fill="#000000",fon
 
 canvas.create_text(129.0,354.0,anchor="nw",text="Waddy",fill="#000000",font=("Segoe UI", 35 * -1))
 
-canvas.create_text(133.0,446.0,anchor="nw",text="If you already have an account ",fill="#000000",font=("Segoe UI", 16 * -1))
-
-canvas.create_text(133.0,472.0,anchor="nw",text="You can Login here !",fill="#000000",font=("Segoe UI", 16 * -1))
 
 #-----------------------------------------Admin ID [ Entry ]-----------------------------------------
 

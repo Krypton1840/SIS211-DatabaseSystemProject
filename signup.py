@@ -27,11 +27,26 @@ def checkTelephoneNumber(input_telephone_entry):
     regex_telephone='^01[0125][0-9]{8}$'
     if not search(regex_telephone,input_telephone_entry):   
             raise ValueError("Invalid Telephone Number!")
+def checkAdminID(input_admin_id):
+    if  not (input_admin_id.isnumeric() and input_admin_id[0:3]=="111" and len(input_admin_id)==7):   
+            raise ValueError("Invalid Admin ID!")
+        
+def checkNationalID(input_national_id):
+    if  not (input_national_id.isnumeric() and len(input_national_id)==14):   
+            raise ValueError("Invalid National ID!")
 
-def checkAll(first_name,last_name,email,password,telephone):
+def checkAllClientEntries(first_name,last_name,email,password,telephone):
     checkName(first_name,"First Name")
     checkName(last_name,"Last Name")
     checkEmail(email)
+    checkPasswordLength(password)
+    checkTelephoneNumber(telephone)
+    
+def checkAllAdminEntries(admin_id,first_name,last_name,national_id,password,telephone):
+    checkAdminID(admin_id)
+    checkName(first_name,"First Name")
+    checkName(last_name,"Last Name")
+    checkNationalID(national_id)
     checkPasswordLength(password)
     checkTelephoneNumber(telephone)
     
@@ -45,7 +60,7 @@ def formatTelephone(input_telephone_entry):
         input_telephone_entry=input_telephone_entry[2:]
     return input_telephone_entry   
  
-def signUp(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry):
+def signUpClient(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry):
     first_name=first_name_entry.get()
     last_name=last_name_entry.get()
     email=email_entry.get()
@@ -57,12 +72,35 @@ def signUp(first_name_entry,last_name_entry,email_entry,password_entry,telephone
         try:
             email=formatEmail(email)
             telephone=formatTelephone(telephone)
-            checkAll(first_name,last_name,email,password,telephone)
+            checkAllClientEntries(first_name,last_name,email,password,telephone)
             cursor.execute(
                 '''INSERT INTO CLIENT(FIRSTNAME,LASTNAME,EMAIL,[PASSWORD],TELEPHONENUM) 
                    VALUES(?,?,?,?,?);''',first_name,last_name,email,password,telephone)
             conn.commit()
             messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name+" "+last_name)
             print("Log: ",first_name," ",last_name," ",email," ",password," ",telephone)
+        except ValueError as error_message:
+            messagebox.showerror("Sign Up failed",error_message)
+            
+            
+def signUpAdmin(admin_id_entry,first_name_entry,last_name_entry,national_id_entry,password_entry,telephone_entry):
+    admin_id=admin_id_entry.get()
+    first_name=first_name_entry.get()
+    last_name=last_name_entry.get()
+    national_id=national_id_entry.get()
+    password=password_entry.get()
+    telephone=telephone_entry.get()
+    if not(admin_id.strip() and first_name.strip() and last_name.strip() and national_id.strip() and password.strip() and telephone.strip()):
+        messagebox.showerror("Sign Up failed","All fields are required!")
+    else:
+        try:
+            telephone=formatTelephone(telephone)
+            checkAllAdminEntries(admin_id,first_name,last_name,national_id,password,telephone)
+            cursor.execute(
+                '''INSERT INTO ADMIN(ADMINID,FIRSTNAME,LASTNAME,NATIONALID,[PASSWORD],TELEPHONENUM) 
+                   VALUES(?,?,?,?,?,?);''',admin_id,first_name,last_name,national_id,password,telephone)
+            conn.commit()
+            messagebox.showinfo("Success","Signed Up Successfully, Welcome Admin "+first_name+" "+last_name)
+            print("Log: ",admin_id," ",first_name," ",last_name," ",national_id," ",password," ",telephone)
         except ValueError as error_message:
             messagebox.showerror("Sign Up failed",error_message)

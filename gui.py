@@ -1,9 +1,10 @@
 from pathlib import Path
 
 
-# from tkinter import *
+from tkinter import *
+from login import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+#from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -15,7 +16,7 @@ def relative_to_assets(path: str) -> Path:
 
 
 window = Tk()
-
+window.title("Waddy Log In")
 window.geometry("1440x900")
 window.configure(bg = "#FFFFFF")
 
@@ -35,7 +36,7 @@ canvas.create_text(
     890.0,
     290.0,
     anchor="nw",
-    text="Enter email or username",
+    text="Enter ID",
     fill="#A7A2FF",
     font=("Segoe UI Regular", 15 * -1)
 )
@@ -135,7 +136,7 @@ log_in_button = Button(
     image=log_in_button_image,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
+    command=lambda: attemptLogIn(userid_entry,password_entry),
     relief="flat"
 )
 

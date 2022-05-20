@@ -58,8 +58,23 @@ def formatEmail(input_email_entry):
 def formatTelephone(input_telephone_entry): 
     if input_telephone_entry[0:2] == '+2':
         input_telephone_entry=input_telephone_entry[2:]
-    return input_telephone_entry   
- 
+    return input_telephone_entry
+   
+def insertClientIntoDB(first_name,last_name,email,password,telephone):
+    try:
+        cursor.execute(
+            '''INSERT INTO CLIENT(FIRSTNAME,LASTNAME,EMAIL,[PASSWORD],TELEPHONENUM) 
+               VALUES(?,?,?,?,?);''',first_name,last_name,email,password,telephone)
+        conn.commit()
+    except pyodbc.Error as ex:
+        sqlstate= ex.args[0];
+        if sqlstate == '23000':
+            alreadyInUseValue=ex.args[1]
+            indexOfValueDuplicated=alreadyInUseValue.find("is (")
+            alreadyInUseValue=alreadyInUseValue[indexOfValueDuplicated+4:]
+            endOfValueIndex=alreadyInUseValue.find(")")
+            alreadyInUseValue=alreadyInUseValue[:endOfValueIndex]   
+            raise ValueError(alreadyInUseValue+" is already in use")      
 def signUpClient(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry):
     first_name=first_name_entry.get()
     last_name=last_name_entry.get()
@@ -73,16 +88,27 @@ def signUpClient(first_name_entry,last_name_entry,email_entry,password_entry,tel
             email=formatEmail(email)
             telephone=formatTelephone(telephone)
             checkAllClientEntries(first_name,last_name,email,password,telephone)
-            cursor.execute(
-                '''INSERT INTO CLIENT(FIRSTNAME,LASTNAME,EMAIL,[PASSWORD],TELEPHONENUM) 
-                   VALUES(?,?,?,?,?);''',first_name,last_name,email,password,telephone)
-            conn.commit()
+            insertClientIntoDB(first_name,last_name,email,password,telephone)
             messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name+" "+last_name)
             print("Log: ",first_name," ",last_name," ",email," ",password," ",telephone)
         except ValueError as error_message:
             messagebox.showerror("Sign Up failed",error_message)
             
-            
+def insertAdminIntoDB(admin_id,first_name,last_name,national_id,password,telephone):
+    try:
+        cursor.execute(
+            '''INSERT INTO ADMIN(ADMINID,FIRSTNAME,LASTNAME,NATIONALID,[PASSWORD],TELEPHONENUM) 
+               VALUES(?,?,?,?,?,?);''',admin_id,first_name,last_name,national_id,password,telephone)
+        conn.commit()
+    except pyodbc.Error as ex:
+        sqlstate= ex.args[0];
+        if sqlstate == '23000':
+            alreadyInUseValue=ex.args[1]
+            indexOfValueDuplicated=alreadyInUseValue.find("is (")
+            alreadyInUseValue=alreadyInUseValue[indexOfValueDuplicated+4:]
+            endOfValueIndex=alreadyInUseValue.find(")")
+            alreadyInUseValue=alreadyInUseValue[:endOfValueIndex]   
+            raise ValueError(alreadyInUseValue+" is already in use")            
 def signUpAdmin(admin_id_entry,first_name_entry,last_name_entry,national_id_entry,password_entry,telephone_entry):
     admin_id=admin_id_entry.get()
     first_name=first_name_entry.get()
@@ -96,10 +122,7 @@ def signUpAdmin(admin_id_entry,first_name_entry,last_name_entry,national_id_entr
         try:
             telephone=formatTelephone(telephone)
             checkAllAdminEntries(admin_id,first_name,last_name,national_id,password,telephone)
-            cursor.execute(
-                '''INSERT INTO ADMIN(ADMINID,FIRSTNAME,LASTNAME,NATIONALID,[PASSWORD],TELEPHONENUM) 
-                   VALUES(?,?,?,?,?,?);''',admin_id,first_name,last_name,national_id,password,telephone)
-            conn.commit()
+            insertAdminIntoDB(admin_id,first_name,last_name,national_id,password,telephone)
             messagebox.showinfo("Success","Signed Up Successfully, Welcome Admin "+first_name+" "+last_name)
             print("Log: ",admin_id," ",first_name," ",last_name," ",national_id," ",password," ",telephone)
         except ValueError as error_message:

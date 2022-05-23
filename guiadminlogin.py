@@ -17,15 +17,15 @@ class AdminLoginPage:
             
         window = Tk()
         window.title("Waddy Admin Log In")
-        window.geometry("1440x900")
+        window.geometry("1048x768")
         window.configure(bg = "#FFFFFF")
 
 
         canvas = Canvas(
             window,
             bg = "#FFFFFF",
-            height = 900,
-            width = 1440,
+            height = 768,
+            width = 1048,
             bd = 0,
             highlightthickness = 0,
             relief = "ridge"
@@ -34,7 +34,7 @@ class AdminLoginPage:
 
         # First TextBox for ID
         canvas.create_text(
-            894.0,
+            898.0-358,
             290.0,
             anchor="nw",
             text="ID",
@@ -42,20 +42,20 @@ class AdminLoginPage:
             font=("Segoe UI Regular", 15 * -1)
         )
 
-        userid_entry_image = PhotoImage(
-            file=relative_to_assets("userid_entry_image.png"))
-        userid_entry_bg = canvas.create_image(
-            1094.5,
-            334.5,
-            image=userid_entry_image
-        )
+        # userid_entry_image = PhotoImage(
+        #     file=relative_to_assets("userid_entry_image.png"))
+        # userid_entry_bg = canvas.create_image(
+        #     1094.5,
+        #     334.5,
+        #     image=userid_entry_image
+        # )
         userid_entry = Entry(
             bd=0,
             bg="#EFEFFF",
             highlightthickness=0
         )
         userid_entry.place(
-            x=898.0,
+            x=898.0-358,
             y=313.0,
             width=393.0,
             height=41.0
@@ -63,7 +63,7 @@ class AdminLoginPage:
 
         # Second TextBox for password
         canvas.create_text(
-            890.0,
+            890.0-349,
             388.0,
             anchor="nw",
             text="Password",
@@ -71,22 +71,23 @@ class AdminLoginPage:
             font=("Segoe UI Regular", 15 * -1)
         )
 
-        password_entry_image = PhotoImage(
-            file=relative_to_assets("password_entry_image.png"))
-        password_entry_bg = canvas.create_image(
-            1094.5,
-            432.5,
-            image=password_entry_image
-        )
+        # password_entry_image = PhotoImage(
+        #     file=relative_to_assets("password_entry_image.png"))
+        # password_entry_bg = canvas.create_image(
+        #     1094.5,
+        #     432.5,
+        #     image=password_entry_image
+        # )
 
         password_entry = Entry(
             bd=0,
+            show="●",
             bg="#EFEFFF",
             highlightthickness=0
         )
 
         password_entry.place(
-            x=898.0,
+            x=898.0-358,
             y=411.0,
             width=393.0,
             height=41.0
@@ -111,18 +112,25 @@ class AdminLoginPage:
         )
 
         # Log in button
-        log_in_button_image = PhotoImage(
-            file=relative_to_assets("log_in_button_image.png"))
+        # log_in_button_image = PhotoImage(
+        #     file=relative_to_assets("log_in_button_image.png"))
+        # log_in_button = Button(
+        #     image=log_in_button_image,
+        #     borderwidth=0,
+        #     highlightthickness=0,
+        #     command=lambda: attemptAdminLogIn(userid_entry,password_entry),
+        #     relief="flat"
+        # )
+        buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
         log_in_button = Button(
-            image=log_in_button_image,
+            text='Log in',bg='#4D47C3',fg='#ffffff',font=buttonFont,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: attemptAdminLogIn(userid_entry,password_entry),
             relief="flat"
         )
-
         log_in_button.place(
-            x=890.0,
+            x=890.0-358,
             y=494.0,
             width=409.0,
             height=40.0

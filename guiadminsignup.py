@@ -46,9 +46,9 @@ class AdminSignUpPage:
 
         canvas.create_text(541.0,181.0-68,anchor="nw",text="Admin ID",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        admin_id_entry_image = PhotoImage( file=relative_to_assets("admin_id_entry_image.png"))
+        # admin_id_entry_image = PhotoImage( file=relative_to_assets("admin_id_entry_image.png"))
 
-        admin_id_entry_bg = canvas.create_image(735.5,223.5,image=admin_id_entry_image)
+        # admin_id_entry_bg = canvas.create_image(735.5,223.5,image=admin_id_entry_image)
 
         admin_id_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
@@ -58,9 +58,9 @@ class AdminSignUpPage:
 
         canvas.create_text(541.0,181.0,anchor="nw",text="First Name",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        first_name_entry_image = PhotoImage( file=relative_to_assets("first_name_entry_image.png"))
+        # first_name_entry_image = PhotoImage( file=relative_to_assets("first_name_entry_image.png"))
 
-        first_name_entry_bg = canvas.create_image(735.5,223.5,image=first_name_entry_image)
+        # first_name_entry_bg = canvas.create_image(735.5,223.5,image=first_name_entry_image)
 
         first_name_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
@@ -70,9 +70,9 @@ class AdminSignUpPage:
 
         canvas.create_text(541.0,249.0,anchor="nw",text="Last Name",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        last_name_entry_image = PhotoImage(file=relative_to_assets("last_name_entry_image.png"))
+        # last_name_entry_image = PhotoImage(file=relative_to_assets("last_name_entry_image.png"))
 
-        last_name_entry_bg = canvas.create_image(735.5,292.0,image=last_name_entry_image)
+        # last_name_entry_bg = canvas.create_image(735.5,292.0,image=last_name_entry_image)
 
         last_name_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
@@ -82,9 +82,9 @@ class AdminSignUpPage:
 
         canvas.create_text(541.0,317.0,anchor="nw",text="National ID",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        national_id_entry_image = PhotoImage(file=relative_to_assets("national_id_entry_image.png"))
+        # national_id_entry_image = PhotoImage(file=relative_to_assets("national_id_entry_image.png"))
 
-        national_id_entry_bg = canvas.create_image(735.5,359.0,image=national_id_entry_image)
+        # national_id_entry_bg = canvas.create_image(735.5,359.0,image=national_id_entry_image)
 
         national_id_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
@@ -94,9 +94,9 @@ class AdminSignUpPage:
 
         canvas.create_text(541.0,385.0,anchor="nw",text="Password",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        password_entry_image = PhotoImage(file=relative_to_assets("password_entry_image.png"))
+        # password_entry_image = PhotoImage(file=relative_to_assets("password_entry_image.png"))
 
-        password_entry_bg = canvas.create_image(735.5,427.5,image=password_entry_image)
+        # password_entry_bg = canvas.create_image(735.5,427.5,image=password_entry_image)
 
         password_entry = Entry(bd=0,show="●",bg="#EFEFFF",highlightthickness=0)
 
@@ -106,9 +106,9 @@ class AdminSignUpPage:
 
         canvas.create_text(541.0,453.0,anchor="nw",text="Telephone Number",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        telephone_entry_image = PhotoImage(file=relative_to_assets("telephone_entry_image.png"))
+        # telephone_entry_image = PhotoImage(file=relative_to_assets("telephone_entry_image.png"))
 
-        telephone_entry_bg = canvas.create_image(735.5,495.5,image=telephone_entry_image)
+        # telephone_entry_bg = canvas.create_image(735.5,495.5,image=telephone_entry_image)
 
         telephone_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
@@ -117,9 +117,10 @@ class AdminSignUpPage:
 
         #-----------------------------------------SignUp [ Button ]-----------------------------------------
 
-        signup_button_image = PhotoImage(file=relative_to_assets("signup_button_image.png"))
-
-        signup_button = Button(image=signup_button_image,borderwidth=0,highlightthickness=0,
+        # signup_button_image = PhotoImage(file=relative_to_assets("signup_button_image.png"))
+        buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
+         
+        signup_button = Button(text='Sign Up',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
                                command=lambda:[signUpAdmin(admin_id_entry,first_name_entry,last_name_entry,national_id_entry,password_entry,telephone_entry)],
                                relief="flat"
                         )

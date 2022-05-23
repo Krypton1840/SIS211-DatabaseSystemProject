@@ -1,9 +1,9 @@
 from tkinter import messagebox
 from re import *
 import pyodbc 
-
+from decouple import config
 # Establshing connection with mssql
-conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=Waddy;UID=sa;PWD=-Password-')
+conn = pyodbc.connect(config('DB_CONNECTION'))
 
 # Creating a cursor to execute sql commands
 cursor = conn.cursor()
@@ -55,7 +55,7 @@ def attemptAdminLogIn(adminId, password):
 
                 # Here a new page should open the admin's main page
             else:
-                messagebox.showinfo("Log In Failed","Invalid ID or password.")
+                messagebox.showerror("Log In Failed","Invalid ID or password.")
                 return
 
         except ValueError as error_message:
@@ -84,7 +84,7 @@ def attemptClientLogIn(userEmail, password):
 
                 # Here a new page should open the client's main page
             else:
-                messagebox.showinfo("Log In Failed","Invalid Email or password.")
+                messagebox.showerror("Log In Failed","Invalid Email or password.")
                 return
 
         except ValueError as error_message:

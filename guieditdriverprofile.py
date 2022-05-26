@@ -9,7 +9,8 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Radiobutton, Toplevel, messagebox,Frame,font
 from re import *
-from profile import * 
+from viewprofile import * 
+from editprofile import * 
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
@@ -51,14 +52,6 @@ class EditDriverProfilePage:
             font=("Segoe UI", 50 * -1)
         )
 
-        buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
-
-        save_profile_button = Button(text='Save changes',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
-                               relief="flat"
-                        )
-
-        save_profile_button.place(x=708.0,y=104.0,width=167.0,height=70.0)
-
         canvas.create_text(
             147.0,
             203.0,
@@ -77,6 +70,18 @@ class EditDriverProfilePage:
             font=("Segoe UI", 25 * -1)
         )
 
+        firstname_entry = Entry(
+            bd=0,
+            bg="#EFEFFF",
+            highlightthickness=0
+        )
+        firstname_entry.place(
+            x=540.0,
+            y=203.0,
+            width=393.0,
+            height=41.0
+        )
+
         canvas.create_text(
             147.0,
             262.0,
@@ -93,6 +98,18 @@ class EditDriverProfilePage:
             text=driverData[1],
             fill="#A7A2FF",
             font=("Segoe UI", 25 * -1)
+        )
+
+        lastname_entry = Entry(
+            bd=0,
+            bg="#EFEFFF",
+            highlightthickness=0
+        )
+        lastname_entry.place(
+            x=540.0,
+            y=262.0,
+            width=393.0,
+            height=41.0
         )
 
         canvas.create_text(
@@ -131,6 +148,18 @@ class EditDriverProfilePage:
             font=("Segoe UI", 25 * -1)
         )
 
+        phone_entry = Entry(
+            bd=0,
+            bg="#EFEFFF",
+            highlightthickness=0
+        )
+        phone_entry.place(
+            x=540.0,
+            y=380.0,
+            width=393.0,
+            height=41.0
+        )
+
         canvas.create_text(
             147.0,
             443.0,
@@ -149,6 +178,19 @@ class EditDriverProfilePage:
             font=("Segoe UI", 25 * -1)
         )
 
+        gender_entry = Entry(
+            bd=0,
+            bg="#EFEFFF",
+            highlightthickness=0
+        )
+        gender_entry.place(
+            x=540.0,
+            y=443.0,
+            width=393.0,
+            height=41.0
+        )
+
+
         canvas.create_text(
             147.0,
             505.0,
@@ -165,6 +207,18 @@ class EditDriverProfilePage:
             text=driverData[4],
             fill="#A7A2FF",
             font=("Segoe UI", 25 * -1)
+        )
+
+        nationalID_entry = Entry(
+            bd=0,
+            bg="#EFEFFF",
+            highlightthickness=0
+        )
+        nationalID_entry.place(
+            x=540.0,
+            y=505.0,
+            width=393.0,
+            height=41.0
         )
         
         canvas.create_text(
@@ -185,6 +239,32 @@ class EditDriverProfilePage:
             font=("Segoe UI", 25 * -1)
         )
 
+        licenseexpdate_entry = Entry(
+            bd=0,
+            bg="#EFEFFF",
+            highlightthickness=0
+        )
+        licenseexpdate_entry.place(
+            x=540.0,
+            y=567.0,
+            width=393.0,
+            height=41.0
+        )
+
+
+        buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
+
+        save_profile_button = Button(text='Save changes',
+                                    bg='#4D47C3',
+                                    fg='#ffffff',
+                                    font=buttonFont,
+                                    borderwidth=0,
+                                    highlightthickness=0,
+                                    command=lambda: SaveDriver(firstname_entry,lastname_entry,phone_entry,gender_entry,nationalID_entry,licenseexpdate_entry,driver_id_passed),
+                                    relief="flat"
+                        )
+
+        save_profile_button.place(x=708.0,y=104.0,width=167.0,height=70.0)
         #-----------------------------Go Back [Button]------------------------------------
         # def goBackToMenu():
         #     window.destroy()

@@ -13,3 +13,7 @@ def displayClientProfile(client_id):
 def displayAdminProfile(admin_id):
     cursor.execute('SELECT FirstName,LastName, NationalID, TelephoneNum,Gender from admin where AdminID=?',admin_id)
     return cursor 
+
+def displayDriverProfile(driver_id):
+    cursor.execute('SELECT FirstName,LastName, TelephoneNum,Gender,NationalID,DriverLicenseExpiryDate from driver where DriverID=?',driver_id)
+    return cursor     

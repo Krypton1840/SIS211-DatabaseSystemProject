@@ -51,7 +51,9 @@ def attemptAdminLogIn(adminId, password):
             userAccount = cursor.fetchone()
 
             if userAccount:
+                
                 messagebox.showinfo("Success","Logged In Successfully.")
+                return enteredId
 
                 # Here a new page should open the admin's main page
             else:

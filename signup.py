@@ -149,5 +149,6 @@ def signUpAdmin(admin_id_entry,first_name_entry,last_name_entry,national_id_entr
             insertAdminIntoDB(admin_id,first_name,last_name,national_id,password,telephone)
             messagebox.showinfo("Success","Signed Up Successfully, Welcome Admin "+first_name+" "+last_name)
             print("Log: ",admin_id," ",first_name," ",last_name," ",national_id," ",password," ",telephone)
+            return admin_id;
         except ValueError as error_message:
             messagebox.showerror("Sign Up failed",error_message)

@@ -116,12 +116,18 @@ class AdminSignUpPage:
 
 
         #-----------------------------------------SignUp [ Button ]-----------------------------------------
-
+        def signUpAndRedirect(admin_id_entry,first_name_entry,last_name_entry,national_id_entry,password_entry,telephone_entry):
+            id=signUpAdmin(admin_id_entry,first_name_entry,last_name_entry,national_id_entry,password_entry,telephone_entry)
+            if id:
+                window.destroy()
+                import guiadminmain
+                guiadminmain.AdminMainPage(id);
+                
         # signup_button_image = PhotoImage(file=relative_to_assets("signup_button_image.png"))
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
          
         signup_button = Button(text='Sign Up',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
-                               command=lambda:[signUpAdmin(admin_id_entry,first_name_entry,last_name_entry,national_id_entry,password_entry,telephone_entry)],
+                               command=lambda:signUpAndRedirect(admin_id_entry,first_name_entry,last_name_entry,national_id_entry,password_entry,telephone_entry),
                                relief="flat"
                         )
 

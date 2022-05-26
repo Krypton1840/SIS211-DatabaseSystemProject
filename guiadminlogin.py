@@ -121,12 +121,19 @@ class AdminLoginPage:
         #     command=lambda: attemptAdminLogIn(userid_entry,password_entry),
         #     relief="flat"
         # )
+        def logInAndRedirect(userid_entry,password_entry):
+            id=attemptAdminLogIn(userid_entry,password_entry)
+            if id:
+                window.destroy()
+                import guiadminmain
+                guiadminmain.AdminMainPage(id);
+
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
         log_in_button = Button(
             text='Log in',bg='#4D47C3',fg='#ffffff',font=buttonFont,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: attemptAdminLogIn(userid_entry,password_entry),
+            command=lambda: logInAndRedirect(userid_entry,password_entry),
             relief="flat"
         )
         log_in_button.place(

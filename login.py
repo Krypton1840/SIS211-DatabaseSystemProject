@@ -78,11 +78,12 @@ def attemptClientLogIn(userEmail, password):
             checkEmail(email)
             checkPasswordLength(enteredPass)
 
-            cursor.execute("SELECT * from CLIENT where EMAIL = ? AND PASSWORD = ?", enteredEmail, enteredPass)
-            userAccount = cursor.fetchone()
+            cursor.execute("SELECT CLIENTID from CLIENT where EMAIL = ? AND PASSWORD = ?", enteredEmail, enteredPass)
+            userId = cursor.fetchone()
 
-            if userAccount:
+            if userId:
                 messagebox.showinfo("Success","Logged In Successfully.")
+                return userId
 
                 # Here a new page should open the client's main page
             else:

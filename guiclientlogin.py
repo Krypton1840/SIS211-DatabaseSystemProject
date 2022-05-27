@@ -121,12 +121,19 @@ class ClientLoginPage:
         #     command=lambda: attemptClientLogIn(email_entry,password_entry),
         #     relief="flat"
         # )
+        def logInAndRedirect(email_entry,password_entry):
+            id=attemptClientLogIn(email_entry,password_entry)
+            if id:
+                window.destroy()
+                import guiclientmain
+                guiclientmain.ClientMainPage(id);
+
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
         log_in_button = Button(
             text='Log in',bg='#4D47C3',fg='#ffffff',font=buttonFont,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: attemptClientLogIn(email_entry,password_entry),
+            command=lambda: logInAndRedirect(email_entry,password_entry),
             relief="flat"
         )
         log_in_button.place(

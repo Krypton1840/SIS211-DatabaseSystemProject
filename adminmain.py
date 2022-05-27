@@ -1,24 +1,259 @@
 import pyodbc 
 from tkinter import messagebox
 from re import *
-import datetime
+from datetime import datetime,timedelta
 from decouple import config
 # Establshing connection with mssql
 conn = pyodbc.connect(config('DB_CONNECTION'))
 cursor = conn.cursor()
 
+def getAdminName(admin_id):
+    cursor.execute("SELECT FirstName,LastName FROM Admin WHERE AdminID=?",admin_id)
+    adminName=cursor.fetchone()
+    return adminName[0]+" "+adminName[1]
 
-def getTrips(tree):
-           cursor.execute("SELECT COUNT(*) FROM trip")
-           countOfTrips=cursor.fetchone()
-           cursor.execute('SELECT TripID,FirstName,LastName,PickupTime,AvailableSeats,TripStatus,TripFee from trip inner join driver on trip.DriverID=driver.DriverID;')
+def generateTrips(tree):
+    
+    # If no drivers is the db
+    cursor.execute("SELECT COUNT(*) FROM DRIVER");
+    number_of_drivers=cursor.fetchone()[0]
+    if(number_of_drivers==0):
+        messagebox.showerror("Failed to Generate Trips", "You didn't register any driver")
+        return -1;
+    #------------------------------------------------------------------------------------------------------------------------------------------
+    
+    # if there is operative route
+    cursor.execute("SELECT COUNT(1) FROM Route WHERE Operative=1")
+    is_one_route_operative=cursor.fetchone()[0]
+    if is_one_route_operative==0:
+        messagebox.showerror("Failed to Generate Trips", "Routes are InOperative right now")
+        return -1
+    
+    
+    # Getting the operative routes
+    cursor.execute("SELECT RouteID FROM ROUTE WHERE Operative=1")
+    operative_routes=[]
+    for row in cursor:
+        operative_routes.append(row[0])
+        
+        
+    #-------------------------------------------------------------------------------------------------------------------------------------------
+    
+    
+    cursor.execute(""" SELECT COUNT(*) FROM (SELECT DRIVERID FROM DRIVER EXCEPT SELECT TRIP.DRIVERID FROM TRIP) as d
+                   
+                   """)
+    count_of_new_available_drivers=cursor.fetchone()[0]
+    
+    cursor.execute(""" SELECT DRIVERID FROM DRIVER EXCEPT SELECT TRIP.DRIVERID FROM TRIP
+                   
+                   """)
+    new_available_drivers=cursor.fetchall()
+    
+    
+    
+    #-------------------------------------------------------------------------------------------------------------------------------------------
+    
+    cursor.execute("""SELECT MAX(TripID) as TripID ,TRIP.DRIVERID FROM DRIVER INNER JOIN TRIP ON Driver.DriverID=Trip.DriverID GROUP BY TRIP.DRIVERID""");
+    max_trip_of_all=cursor.fetchall()
+    previously_worked_but_available_drivers=[]
+    count_of_previously_worked_but_available_drivers=0;
+    for row in max_trip_of_all:
+        cursor.execute("SELECT COUNT(*) FROM (SELECT DRIVERID,ROUTEID,TRIPID FROM TRIP where TRIPID=? AND TripStatus='Completed') as cmax",row[0])
+        if cursor.fetchone()[0]==1:
+            cursor.execute("SELECT DRIVERID,ROUTEID,TRIPID FROM TRIP where TRIPID=? AND TripStatus='Completed'",row[0])
+            previously_worked_but_available_drivers.append(cursor.fetchone())
+            count_of_previously_worked_but_available_drivers+=1
+    
+    all_available_drivers=[]
+    
+    if count_of_previously_worked_but_available_drivers==0 and count_of_new_available_drivers==0:
+        
+        messagebox.showerror("Failed to Generate Trips", "No Available Drivers and Commuters")
+        return -1;
+    
+    if count_of_previously_worked_but_available_drivers!=0 and count_of_new_available_drivers==0:
+        for i in previously_worked_but_available_drivers:
+            all_available_drivers.append(i)
+    
+    elif count_of_previously_worked_but_available_drivers==0 and count_of_new_available_drivers!=0:
+        for i in new_available_drivers:
+            all_available_drivers.append((i[0],'X')) 
+        
+       
+    elif count_of_previously_worked_but_available_drivers!=0 and count_of_new_available_drivers!=0:
+        for i in previously_worked_but_available_drivers:
+            all_available_drivers.append(i) 
+        for i in new_available_drivers:
+            all_available_drivers.append((i[0],'X')) 
+            
+    #-------------------------------------------------------------------------------------------------------------------------------------------------------
+    starthour=6
+    
+    trip_status='Not Completed'
+    trip_fee=15
+    number_of_seats=14
+    index=0;
+    for i in range(len(all_available_drivers)):
+        all_available_drivers[i]=list(all_available_drivers[i])
+        
+    for row in all_available_drivers:
+        if row[1]=="O25":
+            all_available_drivers[index][1]="52O"
+        elif row[1]=="52O":
+            all_available_drivers[index][1]="O25"
+        elif row[1]=="X":
+            if index%2==0:
+               all_available_drivers[index][1]="O25"
+            else:
+               all_available_drivers[index][1]="52O"
+        index+=1 
+               
+    drivers_of_O25=[]
+    drivers_of_52O=[]
+    for row in all_available_drivers:
+        if row[1]=="O25":
+            drivers_of_O25.append(row);
+        elif row[1]=="52O":
+            drivers_of_52O.append(row);
+    
+    trip_pickup_time= datetime.strftime(datetime(1,1,1,starthour,0,0,0),"%H:%M")
+    for i in range(17):# Number of trips
+        trip_pickup_time
+        if len(drivers_of_O25)!=0 and i<len(drivers_of_O25) and "O25" in operative_routes: #October
+                cursor.execute("""INSERT INTO TRIP(RouteID,DriverID,PickupTime,AvailableSeats,TripStatus,TripFee)
+                                              VALUES(?,?,?,?,?,?);""",drivers_of_O25[i][1],drivers_of_O25[i][0],trip_pickup_time,number_of_seats,trip_status,trip_fee)
+                cursor.commit()
+        if len(drivers_of_52O)!=0 and i<len(drivers_of_52O) and "52O" in operative_routes:
+                cursor.execute("""INSERT INTO TRIP(RouteID,DriverID,PickupTime,AvailableSeats,TripStatus,TripFee)
+                                              VALUES(?,?,?,?,?,?);""",drivers_of_52O[i][1],drivers_of_52O[i][0],trip_pickup_time,number_of_seats,trip_status,trip_fee)
+                cursor.commit()
+        trip_pickup_time=datetime.strftime(datetime(1,1,1,int(trip_pickup_time[0:2]),0,0,0)+timedelta(hours=1),"%H:%M")
+                
+    getTrips(tree)       
+        
+def cancelTrip(tree):
+        try:     
+            selected_item = tree.selection()[0]
+            values=tree.item(selected_item,'values')
+            cursor.execute("""SELECT COUNT(*) FROM (SELECT TRIPID FROM TRIP WHERE TRIPID=? AND TRIPSTATUS='Not Completed') as c""",values[0])
+            if(cursor.fetchone()[0]!=0):
+                
+                cursor.execute("""DELETE FROM TRIP WHERE TRIPID=? AND TRIPSTATUS='Not Completed'
+                           """,values[0])
+                cursor.commit()
+                messagebox.showinfo("Note","Please inform the clients that had booked trip "+values[0])
+                getTrips(tree)
+            else:
+                messagebox.showinfo("Note","Trip's status is completed so you can't cancel it")
+        except Exception as e:
+            print(e)
+def markTripCompleted(tree):
+        try:     
+            selected_item = tree.selection()[0]
+            values=tree.item(selected_item,'values')
+            cursor.execute("""UPDATE TRIP SET TripStatus='Completed' WHERE TRIPID=?
+                           """,values[0])
+            cursor.commit()
+            getTrips(tree)
+        except Exception as e:
+            print(e)        
+def markAllTripsCompleted(tree):
+        try:     
+            cursor.execute("""UPDATE TRIP SET TripStatus='Completed'
+                           """)
+            cursor.commit()
+            getTrips(tree)
+        except Exception as e:
+            print(e)           
+    
+def makeRouteOperative(tree): #route tree
+       try: 
+            selected_item = tree.selection()[0]
+            values=tree.item(selected_item,'values')
+            cursor.execute("""UPDATE ROUTE SET Operative=1 WHERE RouteID=?
+                           """,values[0])
+            cursor.commit()
+            getRoutes(tree)
+       except Exception as e:
+           print(e)
+           
+def makeRouteInOperative(tree,treeTrip): #route tree
+       try: 
+            selected_item = tree.selection()[0]
+            values=tree.item(selected_item,'values')
+            cursor.execute("""UPDATE ROUTE SET Operative=0 WHERE RouteID=?
+                           """,values[0])
+            cursor.commit()
+            # ay trip not completed and on that route will be deleted and message box
+            cursor.execute("""SELECT COUNT(*) FROM (SELECT TRIPID FROM TRIP WHERE TRIP.ROUTEID=? AND TripStatus='Not Completed')as t;
+                           """,values[0])
+            count_of_canceled_trips=cursor.fetchone()[0]
+            if count_of_canceled_trips!=0:
+                messagebox.showinfo("Note","Please inform the clients that had booked the latest trips on route"+values[0])
+                
+            cursor.execute("""DELETE FROM TRIP WHERE RouteID=? AND TripStatus='Not Completed'""",values[0])
+            cursor.commit()
+            
+            getRoutes(tree)
+            getTrips(treeTrip)
+       except Exception as e:
+           print(e)
+ 
+    
+def getClients(tree): # client tree
+           cursor.execute("SELECT COUNT(*) FROM client")
+           countOfClients=cursor.fetchone()
+           #ClientID,FirstName,LastName,TelephoneNum,Email,Gender
+           cursor.execute('SELECT ClientID,FirstName,LastName,TelephoneNum,Email,Gender from client')
            cell_colors=["cell1","cell2"]
            color_index=0
            tree.delete(*tree.get_children())
+           for i in range(countOfClients[0]):
+                  clientData=cursor.fetchone()
+                  if(clientData):
+                    if(clientData[5]==None):  
+                        tree.insert('', 'end',text="1", values=(clientData[0],clientData[1]+" "+clientData[2],clientData[3],clientData[4],"___"), tags=(cell_colors[color_index]))
+                    else:
+                        tree.insert('', 'end', text="1", values=(clientData[0],clientData[1]+" "+clientData[2],clientData[3],clientData[4],clientData[5]), tags=(cell_colors[color_index]))
+                    if color_index==0:
+                           color_index+=1
+                    elif color_index==1:
+                           color_index-=1;
+                           
+def getRoutes(tree):#route tree
+    cursor.execute("SELECT RouteId,Operative FROM ROUTE")
+    cell_colors=["cell1","cell2"]
+    color_index=0
+    tree.delete(*tree.get_children())
+    for i in range(2):
+         routeData=cursor.fetchone()
+         if(routeData):
+             if routeData[1] == 1:
+                 tree.insert('','end',text="1", values=(routeData[0],"Operative"), tags=(cell_colors[color_index]))
+             elif routeData[1] == 0:
+                 tree.insert('','end',text="1", values=(routeData[0],"InOperative"), tags=(cell_colors[color_index]))
+             if color_index==0:
+                 color_index+=1
+             elif color_index==1:
+                 color_index-=1;
+         
+    
+def getTrips(tree):
+           cursor.execute("SELECT COUNT(*) FROM trip")
+           countOfTrips=cursor.fetchone()
+           cursor.execute('SELECT TripID,RouteID,Trip.DriverID,FirstName,LastName,PickupTime,AvailableSeats,TripStatus,TripFee from trip left join driver on trip.DriverID=driver.DriverID;')
+           cell_colors=["cell1","cell2"]
+           color_index=0
+           tree.delete(*tree.get_children())
+           
            for i in range(countOfTrips[0]):
                   tripData=cursor.fetchone()
                   if(tripData):
-                    tree.insert('', 'end',text="1", values=(tripData[0],tripData[1]+" "+tripData[2],tripData[3],tripData[4],tripData[5],tripData[6]), tags=(cell_colors[color_index]))
+                    if(not tripData[2]):
+                        tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],"___","___",tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=(cell_colors[color_index]))
+                    else:
+                        tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],tripData[2],tripData[2+1]+" "+tripData[3+1],tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=(cell_colors[color_index]))
                     if color_index==0:
                            color_index+=1
                     elif color_index==1:
@@ -232,13 +467,15 @@ def updateDriver(tree,first_name_entry,last_name_entry,telephone_number_entry,ge
     except Exception as e:
         print(e)
     
-def deleteDriver(tree):
+def deleteDriver(tree,treeTrip):
     try:
        selected_item = tree.selection()[0]
        values=tree.item(selected_item,'values')
        cursor.execute('DELETE DRIVER WHERE DRIVERID=?',values[0])
        cursor.commit()
+       cursor.execute("""UPDATE TRIP SET DRIVERID=0 WHERE DRIVERID=?""",values[0])
        getDrivers(tree)
+       getTrips(treeTrip)
     except Exception as e:
         print(e)
                 

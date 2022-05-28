@@ -20,8 +20,8 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 class EditClientProfilePage:
-    def __init__(self):
-        client_id_passed="2220000"
+    def __init__(self,id):
+        client_id_passed=id
         cursor=displayClientProfile(client_id_passed)
         clientData=cursor.fetchone()
         print(clientData)   
@@ -207,27 +207,19 @@ class EditClientProfilePage:
             fill="#A7A2FF",
             font=("Segoe UI", 25 * -1)
         )
-        # '''
-        # gender_entry = Entry(
-        #     bd=0,
-        #     bg="#EFEFFF",
-        #     highlightthickness=0
-        # )
-        # gender_entry.place(
-        #     x=580.0,
-        #     y=505.0,
-        #     width=393.0,
-        #     height=41.0
-        # )
-
-        # '''      
-        gender_entry = StringVar(window)
-        #gender_entry.set("") # default value
-
-        w = OptionMenu(window, gender_entry, "Male", "Female")
-        w.pack()
-        w.place(x=580.0,y=505.0, width= 393.0,height=41.0)
-
+        
+        gender_entry = Entry(
+            bd=0,
+            bg="#EFEFFF",
+            highlightthickness=0
+        )
+        gender_entry.place(
+            x=580.0,
+            y=505.0,
+            width=393.0,
+            height=41.0
+        )
+    
 
         canvas.create_text(
             70.0,

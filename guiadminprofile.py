@@ -14,11 +14,10 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 class ViewAdminProfilePage:
-    def __init__(self):
-        admin_id_passed="1110000"
+    def __init__(self,id):
+        admin_id_passed=id
         cursor=displayAdminProfile(admin_id_passed)
         adminData=cursor.fetchone()
-        print(adminData)
 
         window = Tk()
         window.title("Waddy Admin Profile")
@@ -46,10 +45,16 @@ class ViewAdminProfilePage:
             font=("Segoe UI", 50 * -1)
         )
 
+        def redirectToEditPage():
+            window.destroy()
+            import guieditadminprofile
+            guieditadminprofile.EditAdminProfilePage(admin_id_passed)
+
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
 
         edit_profile_button = Button(text='Edit',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
-                               relief="flat"
+                               relief="flat",
+                               command=lambda:redirectToEditPage()
                         )
 
         edit_profile_button.place(x=708.0,y=104.0,width=147.0,height=70.0)

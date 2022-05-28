@@ -15,8 +15,8 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 class ViewClientProfilePage:
-    def __init__(self):
-        client_id_passed="2220000"
+    def __init__(self,id):
+        client_id_passed=id
         cursor=displayClientProfile(client_id_passed) # FirstName,LastName,TelephoneNum,Gender,Email
         clientData=cursor.fetchone()
         print(clientData)
@@ -43,11 +43,16 @@ class ViewClientProfilePage:
             font=("Segoe UI", 50 * -1)
         )
 
+        def redirectToEditPage():
+            window.destroy()
+            import guieditclientprofile
+            guieditclientprofile.EditClientProfilePage(client_id_passed)
         
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
 
         edit_profile_button = Button(text='Edit',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
-                               relief="flat"
+                               relief="flat",
+                               command=lambda:redirectToEditPage()
                         )
 
         edit_profile_button.place(x=708.0,y=104.0,width=147.0,height=70.0)

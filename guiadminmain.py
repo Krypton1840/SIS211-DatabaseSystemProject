@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk, Button, Label,font
 from adminmain import *
+from adminreport import *
 from pathlib import Path
 from PIL import Image, ImageTk
 
@@ -98,7 +99,7 @@ class AdminMainPage:
         
         #-----------------------------------------------------------Report and name and go to profile------------------------------------------------------------
         generate_report_button = Button(text='Press to Generate a Report',bg='#4D47C3',fg='#ffffff',font=mainButtonFont, borderwidth=0,highlightthickness=0,
-                               command=lambda:print("Comp"),
+                               command=lambda:generateReport(),
                                relief="flat"
                         )
 

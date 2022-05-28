@@ -123,7 +123,7 @@ def giveRating(tree,clientId,driver_rate_entry,trip_rate_entry):
             raise ValueError("Please add a rating (1 to 5) for both")
         if(cursor.fetchone()[0]>0):
             raise ValueError("Already rated")
-        if(int(driver_rate_entry.get())>5 or int(trip_rate_entry.get())>5 or int(driver_rate_entry.get())<0 or int(trip_rate_entry.get())<0 ):
+        if(int(driver_rate_entry.get())>5 or int(trip_rate_entry.get())>5 or int(driver_rate_entry.get())<1 or int(trip_rate_entry.get())<1 ):
             raise ValueError("Not a valid rating")
             
         if(tripStatus == "Completed"):

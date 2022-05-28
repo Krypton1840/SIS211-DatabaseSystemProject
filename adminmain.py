@@ -488,9 +488,12 @@ def deleteDriver(tree,treeTrip):
                 raise ValueError("Please select a driver")
        selected_item = tree.selection()[0]
        values=tree.item(selected_item,'values')
+       cursor.execute("DELETE TRIP WHERE TRIP.DRIVERID=? AND TRIP.TRIPSTATUS='Not Completed'",values[0])
+       cursor.commit()
        cursor.execute('DELETE DRIVER WHERE DRIVERID=?',values[0])
        cursor.commit()
-       cursor.execute("""UPDATE TRIP SET DRIVERID=0 WHERE DRIVERID=?""",values[0])
+       cursor.execute("""UPDATE TRIP SET DRIVERID=0 WHERE DRIVERID=? AND TRIPSTATUS='Completed'""",values[0])
+       messagebox.showwarning("","Please inform the clients that had booked the latest trip of driver of id: "+values[0])
        getDrivers(tree)
        getTrips(treeTrip)
     except Exception as e:

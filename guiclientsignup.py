@@ -47,10 +47,6 @@ class ClientSignUpPage:
 
         canvas.create_text(541.0,181.0,anchor="nw",text="First Name",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        # first_name_entry_image = PhotoImage( file=relative_to_assets("first_name_entry_image.png"))
-
-        # first_name_entry_bg = canvas.create_image(735.5,223.5,image=first_name_entry_image)
-
         first_name_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
         first_name_entry.place(x=539.0,y=202.0,width=393.0,height=41.0)
@@ -58,10 +54,6 @@ class ClientSignUpPage:
         #-----------------------------------------Last Name [ Entry ]-----------------------------------------
 
         canvas.create_text(541.0,249.0,anchor="nw",text="Last Name",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
-
-        # last_name_entry_image = PhotoImage(file=relative_to_assets("last_name_entry_image.png"))
-
-        # last_name_entry_bg = canvas.create_image(735.5,292.0,image=last_name_entry_image)
 
         last_name_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
@@ -71,10 +63,6 @@ class ClientSignUpPage:
 
         canvas.create_text(541.0,317.0,anchor="nw",text="Email",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        # email_entry_image = PhotoImage(file=relative_to_assets("email_entry_image.png"))
-
-        # email_entry_bg = canvas.create_image(735.5,359.0,image=email_entry_image)
-
         email_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
         email_entry.place(x=539.0,y=337.0,width=393.0,height=42.0)
@@ -82,10 +70,6 @@ class ClientSignUpPage:
         #-----------------------------------------Password [ Entry ]-----------------------------------------
 
         canvas.create_text(541.0,385.0,anchor="nw",text="Password",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
-
-        # password_entry_image = PhotoImage(file=relative_to_assets("password_entry_image.png"))
-
-        # password_entry_bg = canvas.create_image(735.5,427.5,image=password_entry_image)
 
         password_entry = Entry(bd=0,show="●",bg="#EFEFFF",highlightthickness=0)
 
@@ -95,10 +79,6 @@ class ClientSignUpPage:
 
         canvas.create_text(541.0,453.0,anchor="nw",text="Telephone Number",fill="#A7A2FF",font=("Segoe UI", 15 * -1))
 
-        # telephone_entry_image = PhotoImage(file=relative_to_assets("telephone_entry_image.png"))
-
-        # telephone_entry_bg = canvas.create_image(735.5,495.5,image=telephone_entry_image)
-
         telephone_entry = Entry(bd=0,bg="#EFEFFF",highlightthickness=0)
 
         telephone_entry.place(x=539.0,y=473.0,width=393.0,height=43.0)
@@ -107,18 +87,15 @@ class ClientSignUpPage:
         #-----------------------------------------SignUp [ Button ]-----------------------------------------
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
 
-        # signup_client_button = Button(text='Sign up client',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
-        #                        command=goClientSignUp,
-        #                        relief="flat"
-        #                 )
-
-        # signup_client_button.place(x=319.0,y=384.0,width=409.0,height=42.0)
-        
-        
-        # signup_button_image = PhotoImage(file=relative_to_assets("signup_button_image.png"))
+        def signUpAndRedirect(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry):
+            id=signUpClient(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry)
+            if id:
+                window.destroy()
+                import guiclientmain
+                guiclientmain.ClientMainPage(id);
 
         signup_button = Button(text='Sign Up',bg='#4D47C3',fg='#ffffff',font=buttonFont, borderwidth=0,highlightthickness=0,
-                               command=lambda:[signUpClient(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry)],
+                               command=lambda:[signUpAndRedirect(first_name_entry,last_name_entry,email_entry,password_entry,telephone_entry)],
                                relief="flat"
                         )
 

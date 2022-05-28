@@ -70,7 +70,7 @@ class MenuPage:
                         )
 
         signup_admin_button.place(x=319.0,y=300.0-90,width=409.0,height=42.0)
-        login_client_button = Button(text='Log in client',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
+        login_client_button = Button(text='Log in Client',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
                                command=goClientLogin,
                                relief="flat"
                         )

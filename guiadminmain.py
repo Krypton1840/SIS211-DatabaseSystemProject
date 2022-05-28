@@ -1,8 +1,17 @@
 from tkinter import *
 from tkinter import ttk, Button, Label,font
 from adminmain import *
+from pathlib import Path
+from PIL import Image, ImageTk
 
-   
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+
+
+    
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
+
 class AdminMainPage:
     def __init__(self,id):
         window = Tk()
@@ -22,6 +31,12 @@ class AdminMainPage:
 
         canvas.place(x = 0, y = 0)
         mainButtonFont= font.Font(family='Segoe UI', size=8, weight='bold')
+        #---------------------------------------------------------------------------------------
+        reload_loaded_image=Image.open(relative_to_assets("reload-button.png"))
+        reload_loaded_image_resized=reload_loaded_image.resize((35-10,30-10))
+        reload_photo = ImageTk.PhotoImage(reload_loaded_image_resized)
+        reload_button = Button(image=reload_photo,borderwidth=0,command=lambda:reloadAdminMainPage(treeTrip,treeClient,treeDriverBus),relief="flat")
+        reload_button.place(x=2.5,y=2.5,width=30-10,height=30-10)
         
         #------------------------------------------------------------------Trips and Routes Toolbox------------------------------------------------------------
         canvas.create_text(321,2.5,anchor="nw",text="Trips and Routes",fill="#4D47C3",font=("Segoe UI", 10,'bold'))
@@ -323,5 +338,3 @@ class AdminMainPage:
         
         window.mainloop()
         
-# if __name__=="__main__":
-#        app=AdminMainPage("1110000")

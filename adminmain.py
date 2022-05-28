@@ -134,6 +134,8 @@ def generateTrips(tree):
         
 def cancelTrip(tree):
         try:     
+            if(len(tree.selection())==0):
+                raise ValueError("Please select a Trip")
             selected_item = tree.selection()[0]
             values=tree.item(selected_item,'values')
             cursor.execute("""SELECT COUNT(*) FROM (SELECT TRIPID FROM TRIP WHERE TRIPID=? AND TRIPSTATUS='Not Completed') as c""",values[0])
@@ -142,14 +144,16 @@ def cancelTrip(tree):
                 cursor.execute("""DELETE FROM TRIP WHERE TRIPID=? AND TRIPSTATUS='Not Completed'
                            """,values[0])
                 cursor.commit()
-                messagebox.showinfo("Note","Please inform the clients that had booked trip "+values[0])
+                messagebox.showwarning("Note","Please inform the clients that had booked trip "+values[0])
                 getTrips(tree)
             else:
-                messagebox.showinfo("Note","Trip's status is completed so you can't cancel it")
+                raise ValueError("Trip's status is completed so you can't cancel it")
         except Exception as e:
-            print(e)
+            messagebox.showerror("Cancellation failed",e)
 def markTripCompleted(tree):
-        try:     
+        try:
+            if(len(tree.selection())==0):
+                raise ValueError("Please select a Trip")     
             selected_item = tree.selection()[0]
             values=tree.item(selected_item,'values')
             cursor.execute("""UPDATE TRIP SET TripStatus='Completed' WHERE TRIPID=?
@@ -157,7 +161,7 @@ def markTripCompleted(tree):
             cursor.commit()
             getTrips(tree)
         except Exception as e:
-            print(e)        
+            messagebox.showerror("",e)       
 def markAllTripsCompleted(tree):
         try:     
             cursor.execute("""UPDATE TRIP SET TripStatus='Completed'
@@ -169,6 +173,8 @@ def markAllTripsCompleted(tree):
     
 def makeRouteOperative(tree): #route tree
        try: 
+            if(len(tree.selection())==0):
+                raise ValueError("Please select a route")
             selected_item = tree.selection()[0]
             values=tree.item(selected_item,'values')
             cursor.execute("""UPDATE ROUTE SET Operative=1 WHERE RouteID=?
@@ -176,10 +182,12 @@ def makeRouteOperative(tree): #route tree
             cursor.commit()
             getRoutes(tree)
        except Exception as e:
-           print(e)
+           messagebox.showerror("",e)
            
 def makeRouteInOperative(tree,treeTrip): #route tree
        try: 
+            if(len(tree.selection())==0):
+                raise ValueError("Please select a route")
             selected_item = tree.selection()[0]
             values=tree.item(selected_item,'values')
             cursor.execute("""UPDATE ROUTE SET Operative=0 WHERE RouteID=?
@@ -198,7 +206,7 @@ def makeRouteInOperative(tree,treeTrip): #route tree
             getRoutes(tree)
             getTrips(treeTrip)
        except Exception as e:
-           print(e)
+           messagebox.showerror("",e)
  
     
 def getClients(tree): # client tree
@@ -273,6 +281,11 @@ def getDrivers(tree):
                            color_index+=1
                     elif color_index==1:
                            color_index-=1;
+def reloadAdminMainPage(treeTrip,treeClient,treeDriverBus):
+    getTrips(treeTrip)
+    getClients(treeClient)
+    getDrivers(treeDriverBus)
+
 
 # Name entry validation function
 def checkName(input_name_entry,name_entry):
@@ -434,6 +447,8 @@ def updateDriver(tree,first_name_entry,last_name_entry,telephone_number_entry,ge
     first_name_entry.focus()
     
     try:
+        if(len(tree.selection())==0):
+                raise ValueError("Please select a driver")
         selected_item = tree.selection()[0]
         values=tree.item(selected_item,'values')   
         if first_name.strip()=="":
@@ -465,10 +480,12 @@ def updateDriver(tree,first_name_entry,last_name_entry,telephone_number_entry,ge
         getDrivers(tree)         
         
     except Exception as e:
-        print(e)
+        messagebox.showerror("Update failed",e)
     
 def deleteDriver(tree,treeTrip):
     try:
+       if(len(tree.selection())==0):
+                raise ValueError("Please select a driver")
        selected_item = tree.selection()[0]
        values=tree.item(selected_item,'values')
        cursor.execute('DELETE DRIVER WHERE DRIVERID=?',values[0])
@@ -477,5 +494,5 @@ def deleteDriver(tree,treeTrip):
        getDrivers(tree)
        getTrips(treeTrip)
     except Exception as e:
-        print(e)
+        messagebox.showerror("Deletion failed",e)
                 

@@ -40,14 +40,14 @@ def getBookings(tree,clientID):
     cursor.execute("""SELECT COUNT(*) FROM BOOKS_A WHERE CLIENTID=?""",clientID)
     # cursor.execute("""SELECT MAX(TRIP.TRIPID) FROM TRIP""")
     countOfTrips=cursor.fetchone()
-    cursor.execute("""SELECT BOOKINGID,BOOKS_A.TRIPID,PICKUPSTATION,TRIP.ROUTEID,PickupTime,TripStatus,FIRSTNAME,LASTNAME,LICENSEPLATE,TELEPHONENUM,TripFee,NUMBEROFSEATS,DRIVERRATING,TRIPRATING 
+    cursor.execute("""SELECT BOOKINGID,BOOKS_A.TRIPID,PICKUPSTATION,TRIP.ROUTEID,PickupTime,TripStatus,FIRSTNAME,LASTNAME,LICENSEPLATE,TELEPHONENUM,TripFee,NUMBEROFSEATS,DRIVERRATING,TRIPRATING,TRIP.DRIVERID
                     FROM BOOKS_A inner join TRIP 
                     ON TRIP.TRIPID=BOOKS_A.TRIPID AND BOOKS_A.CLIENTID=?
-                    inner join DRIVER
+                    Left outer join DRIVER
                     ON TRIP.DRIVERID=DRIVER.DRIVERID
                     inner join ROUTE
                     ON TRIP.ROUTEID=ROUTE.ROUTEID
-                    inner join COMMUTERBUS
+                    LEFT join COMMUTERBUS
                     ON DRIVER.DRIVERID = COMMUTERBUS.DRIVERID
                     LEFT OUTER JOIN FEEDBACK
                     ON BOOKS_A.CLIENTID=FEEDBACK.CLIENTID AND BOOKS_A.TRIPID=FEEDBACK.TRIPID""",clientID)
@@ -56,8 +56,10 @@ def getBookings(tree,clientID):
     tree.delete(*tree.get_children())
     for i in range(countOfTrips[0]):
             bookingData=cursor.fetchone()
-            if(bookingData):
-                tree.insert('', 'end',text="1", values=(bookingData[0],bookingData[1],bookingData[2],bookingData[3],bookingData[4],bookingData[5],bookingData[6]+" "+bookingData[7],bookingData[8],bookingData[9],bookingData[10],bookingData[11],bookingData[12],bookingData[13]), tags=(cell_colors[color_index]))
+            if(not bookingData[14]):
+                tree.insert('', 'end',text="1", values=(bookingData[0],bookingData[1],bookingData[2],bookingData[3],bookingData[4],bookingData[5],"___"+" "+"___","___","___",bookingData[10]*bookingData[11],bookingData[11],bookingData[12],bookingData[13]), tags=(cell_colors[color_index]))
+            else:
+                tree.insert('', 'end',text="1", values=(bookingData[0],bookingData[1],bookingData[2],bookingData[3],bookingData[4],bookingData[5],bookingData[6]+" "+bookingData[7],bookingData[8],bookingData[9],bookingData[10]*bookingData[11],bookingData[11],bookingData[12],bookingData[13]), tags=(cell_colors[color_index]))
             if color_index==0:
                     color_index+=1
             elif color_index==1:

@@ -107,15 +107,20 @@ class AdminMainPage:
 
         generate_report_button.place(x=320+460,y=13,width=139.0+30,height=32.0)
         
+        def redirectToProfile():
+            window.destroy()
+            import guiadminprofile
+            guiadminprofile.ViewAdminProfilePage(admin_id)
+
         go_to_profile_button = Button(text='Go to your profile',bg='#FAF9F6',fg='#4D47C3',font=mainButtonFont, borderwidth=0,highlightthickness=0,
-                               command=lambda:print("Comp"),
+                               command=lambda:redirectToProfile(),
                                relief="flat"
                         )
 
         go_to_profile_button.place(x=320+900+25,y=13,width=100.0,height=32.0)
         admin_name=getAdminName(admin_id)
         canvas.create_text(1027+30+10,17+5,anchor="nw",text="Admin: "+admin_name,fill="#000000",font=("Segoe UI", 9,))
-        canvas.create_text(950+30+10,17+5,anchor="nw",text="ID: "+admin_id,fill="#000000",font=("Segoe UI", 9,))
+        canvas.create_text(950+30+10,17+5,anchor="nw",text="ID: "+str(admin_id),fill="#000000",font=("Segoe UI", 9,))
         
         #------------------------------------------------------------------------------------------------------------------------------------------------------
         

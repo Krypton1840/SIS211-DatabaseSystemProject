@@ -16,7 +16,7 @@ class ClientMainPage:
     def __init__(self,id):
         window = Tk()
         window.title("Waddy Client Main Page")
-        client_id=id[0];
+        client_id=id;
         session_booking_id = getSessionBookingID()
         
         window.geometry("1448x768")
@@ -189,9 +189,13 @@ class ClientMainPage:
         rate_button.place(x=1100-330-28,y=202.0+107,width=109.0-30,height=32.0) 
         
         
-        
+        def redirectToProfile():
+            window.destroy()
+            import guiclientprofile
+            guiclientprofile.ViewClientProfilePage(client_id)
+
         go_to_profile_button = Button(text='Go to your profile',bg='#FAF9F6',fg='#4D47C3',font=mainButtonFont, borderwidth=0,highlightthickness=0,
-                               command=lambda:print("Comp"),
+                               command=lambda:redirectToProfile(),
                                relief="flat"
                         )
 

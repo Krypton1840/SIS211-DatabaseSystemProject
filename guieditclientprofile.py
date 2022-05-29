@@ -24,7 +24,6 @@ class EditClientProfilePage:
         client_id_passed=id
         cursor=displayClientProfile(client_id_passed)
         clientData=cursor.fetchone()
-        print(clientData)   
 
         window = Tk()
         window.title("Waddy Edit Client Profile")
@@ -251,6 +250,10 @@ class EditClientProfilePage:
             height=41.0
         )
         
+        def redirectToMainpage():
+            window.destroy()
+            import guiclientmain
+            guiclientmain.ClientMainPage(client_id_passed)
 
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
 
@@ -260,23 +263,19 @@ class EditClientProfilePage:
                                     font=buttonFont,
                                     borderwidth=0,
                                     highlightthickness=0,
-                                    command=lambda: SaveClient(firstname_entry,lastname_entry,email_entry,phone_entry,gender_entry,client_id_passed,password_entry),
+                                    command=lambda: [SaveClient(firstname_entry,lastname_entry,email_entry,phone_entry,gender_entry,client_id_passed,password_entry),redirectToMainpage()],
                                     relief="flat"
                         )
 
         save_profile_button.place(x=807.0,y=104.0,width=167.0,height=70.0)
-        #-----------------------------Go Back [Button]------------------------------------
-        # def goBackToMenu():
-        #     window.destroy()
-        #     import gui
-        #     gui.MenuPage()
-        # buttonFont = font.Font(family='Segoe UI', size=14, weight='bold')
-        # go_back_button = Button(text='Go back to menu',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
-        #                        command=goBackToMenu,
-        #                        relief="flat"
-        #                 )
 
-        # go_back_button.place(x=89.0,y=611,width=160.0,height=42.0)
+        buttonFont = font.Font(family='Segoe UI', size=14, weight='bold')
+        go_back_button = Button(text='Go back to main page',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
+                               command=lambda:redirectToMainpage(),
+                               relief="flat"
+                        )
+
+        go_back_button.place(x=65.0,y=611,width=200.0,height=42.0)
 
         window.resizable(False, False)
         window.mainloop()

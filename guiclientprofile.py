@@ -19,7 +19,6 @@ class ViewClientProfilePage:
         client_id_passed=id
         cursor=displayClientProfile(client_id_passed) # FirstName,LastName,TelephoneNum,Gender,Email
         clientData=cursor.fetchone()
-        print(clientData)
         window = Tk()
         window.title("Waddy Client Profile")
         window.geometry("1048x768")
@@ -139,19 +138,33 @@ class ViewClientProfilePage:
             fill="#A7A2FF",
             font=("Segoe UI", 25 * -1)
         )
-        
-        #-----------------------------Go Back [Button]------------------------------------
-        # def goBackToMenu():
-        #     window.destroy()
-        #     import gui
-        #     gui.MenuPage()
-        # buttonFont = font.Font(family='Segoe UI', size=14, weight='bold')
-        # go_back_button = Button(text='Go back to menu',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
-        #                        command=goBackToMenu,
-        #                        relief="flat"
-        #                 )
 
-        # go_back_button.place(x=89.0,y=611,width=160.0,height=42.0)
+        def redirectToMainpage():
+            window.destroy()
+            import guiclientmain
+            guiclientmain.ClientMainPage(client_id_passed)
+
+        def logout():
+            window.destroy()
+            import gui
+            gui.MenuPage()
+        
+        buttonFont = font.Font(family='Segoe UI', size=14, weight='bold')
+        go_back_button = Button(text='Go back to main page',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
+                               command=lambda:redirectToMainpage(),
+                               relief="flat"
+                        )
+
+        go_back_button.place(x=65.0,y=611,width=200.0,height=42.0)
+
+        
+        buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
+        logout_button = Button(text='Log out',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,
+                               command=lambda:logout(),
+                               relief="flat"
+                        )
+
+        logout_button.place(x=708,y=611,width=147.0,height=70.0)
 
 
 

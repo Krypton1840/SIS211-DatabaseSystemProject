@@ -53,7 +53,7 @@ def attemptAdminLogIn(adminId, password):
             if userAccount:
                 
                 messagebox.showinfo("Success","Logged In Successfully.")
-                return enteredId
+                return userAccount[0]
 
                 # Here a new page should open the admin's main page
             else:
@@ -83,7 +83,7 @@ def attemptClientLogIn(userEmail, password):
 
             if userId:
                 messagebox.showinfo("Success","Logged In Successfully.")
-                return userId
+                return userId[0]
 
                 # Here a new page should open the client's main page
             else:

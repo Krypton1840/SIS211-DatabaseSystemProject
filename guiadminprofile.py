@@ -149,20 +149,32 @@ class ViewAdminProfilePage:
             fill="#A7A2FF",
             font=("Segoe UI", 25 * -1)
         )
+        
+        def redirectToMainpage():
+            window.destroy()
+            import guiadminmain
+            guiadminmain.AdminMainPage(admin_id_passed)
+        
+        def logout():
+            window.destroy()
+            import gui
+            gui.MenuPage()
 
-        #-----------------------------Go Back [Button]------------------------------------
-        # def goBackToMenu():
-        #     window.destroy()
-        #     import gui
-        #     gui.MenuPage()
-        # buttonFont = font.Font(family='Segoe UI', size=14, weight='bold')
-        # go_back_button = Button(text='Go back to menu',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
-        #                        command=goBackToMenu,
-        #                        relief="flat"
-        #                 )
+        buttonFont = font.Font(family='Segoe UI', size=14, weight='bold')
+        go_back_button = Button(text='Go back to main page',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
+                               command=lambda:redirectToMainpage(),
+                               relief="flat"
+                        )
 
-        # go_back_button.place(x=89.0,y=611,width=160.0,height=42.0)
+        go_back_button.place(x=65.0,y=611,width=200.0,height=42.0)
 
+
+        logout_button = Button(text='Log out',bg='#ffffff',fg='#4D47C3',font=buttonFont,borderwidth=0,highlightthickness=0,
+                               command=lambda:logout(),
+                               relief="flat"
+                        )
+
+        logout_button.place(x=708,y=611,width=100.0,height=42.0)
         
         window.resizable(False, False)
         window.mainloop()

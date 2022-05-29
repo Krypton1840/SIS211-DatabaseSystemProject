@@ -38,7 +38,6 @@ def getTrips(tree):
 
 def getBookings(tree,clientID):
     cursor.execute("""SELECT COUNT(*) FROM BOOKS_A WHERE CLIENTID=?""",clientID)
-    # cursor.execute("""SELECT MAX(TRIP.TRIPID) FROM TRIP""")
     countOfTrips=cursor.fetchone()
     cursor.execute("""SELECT BOOKINGID,BOOKS_A.TRIPID,PICKUPSTATION,TRIP.ROUTEID,PickupTime,TripStatus,FIRSTNAME,LASTNAME,LICENSEPLATE,TELEPHONENUM,TripFee,NUMBEROFSEATS,DRIVERRATING,TRIPRATING,TRIP.DRIVERID
                     FROM BOOKS_A inner join TRIP 

@@ -32,28 +32,31 @@ class AdminMainPage:
 
         canvas.place(x = 0, y = 0)
         mainButtonFont= font.Font(family='Segoe UI', size=8, weight='bold')
-        #---------------------------------------------------------------------------------------
+        #-----------------------------------------------------------------------------------------------------------------------------------------------------
+        # Reload/Refresh Button
         reload_loaded_image=Image.open(relative_to_assets("reload-button.png"))
         reload_loaded_image_resized=reload_loaded_image.resize((35-10,30-10))
         reload_photo = ImageTk.PhotoImage(reload_loaded_image_resized)
         reload_button = Button(image=reload_photo,borderwidth=0,command=lambda:reloadAdminMainPage(treeTrip,treeClient,treeDriverBus),relief="flat")
         reload_button.place(x=2.5,y=2.5,width=30-10,height=30-10)
         
-        #------------------------------------------------------------------Trips and Routes Toolbox------------------------------------------------------------
+        #===================================================================Components=================================================================== 
+        
+        #------------------------------------------------------------------Trips and Routes Toolbox Components------------------------------------------------------------
         canvas.create_text(321,2.5,anchor="nw",text="Trips and Routes",fill="#4D47C3",font=("Segoe UI", 10,'bold'))
         
         make_operative_bus_button = Button(text='Operative',bg='#018f06',fg='#ffffff',font=mainButtonFont, borderwidth=0,highlightthickness=0,
                                command=lambda:makeRouteOperative(treeRoute),
                                relief="flat"
                         )
-# x=170-165+20,y=300+20
+
         make_operative_bus_button.place(x=320-40-60-7,y=320,width=109.0-10,height=25.0)
         
         make_inoperative_bus_button = Button(text='InOperative',bg='#960f00',fg='#ffffff',font=mainButtonFont, borderwidth=0,highlightthickness=0,
                                command=lambda:makeRouteInOperative(treeRoute,treeTrip),
                                relief="flat"
                         )
-# x=170-165+20,y=300+20
+        
         make_inoperative_bus_button.place(x=320-40-60-7,y=320+35,width=109.0-10,height=25.0)
         
         canvas.create_rectangle(390-60-7, 310, 391-60-7, 320+35+25+10, fill="#d3d3d3", outline = '#d3d3d3')#vertical line trip route tools
@@ -67,7 +70,6 @@ class AdminMainPage:
         generate_trips_button.place(x=320+100-60-23+7,y=320+15,width=109.0,height=32.0)
         
         
-        #           !Will generate a pdf with the telephone numbers!
         cancel_trip_button = Button(text='Cancel Trip',bg='#4D47C3',fg='#ffffff',font=mainButtonFont, borderwidth=0,highlightthickness=0,
                                command=lambda:cancelTrip(treeTrip),
                                relief="flat"
@@ -92,12 +94,12 @@ class AdminMainPage:
         
         
         canvas.create_rectangle(390-60-7+426+10, 0, 391-60-7+426+10, 320+35+25+14, fill="#d3d3d3", outline = '#d3d3d3')#vertical line trip and user and pdf
-        #------------------------------------------------------------------Client box----------------------------------------------------------------------
+        #------------------------------------------------------------------Client box Components----------------------------------------------------------------------
         canvas.create_text(541.0+300+75+115+10,72,anchor="nw",text="Clients",fill="#4D47C3",font=("Segoe UI", 10,'bold'))
         canvas.create_rectangle(758.5, 37+30, 1448, 38+30, fill="#d3d3d3", outline = '#d3d3d3')
         #------------------------------------------------------------------------------------------------------------------------------------------------
         
-        #-----------------------------------------------------------Report and name and go to profile------------------------------------------------------------
+        #-----------------------------------------------------------Report and name and go to profile Components------------------------------------------------------------
         generate_report_button = Button(text='Press to Generate a Report',bg='#4D47C3',fg='#ffffff',font=mainButtonFont, borderwidth=0,highlightthickness=0,
                                command=lambda:generateReport(),
                                relief="flat"
@@ -116,8 +118,10 @@ class AdminMainPage:
         canvas.create_text(950+30+10,17+5,anchor="nw",text="ID: "+admin_id,fill="#000000",font=("Segoe UI", 9,))
         
         #------------------------------------------------------------------------------------------------------------------------------------------------------
-        canvas.create_rectangle(0, 384-45+55, 1448, 385-45+55, fill="#d3d3d3", outline = '#d3d3d3')
-        #-------------------------------------------------------------------Driver Commuter Toolbox------------------------------------------------------------
+        
+        canvas.create_rectangle(0, 384-45+55, 1448, 385-45+55, fill="#d3d3d3", outline = '#d3d3d3') # a line
+        
+        #-------------------------------------------------------------------Driver Commuter Toolbox Components------------------------------------------------------------
         canvas.create_text(541.0+300+75+80+30+30+70,181.0+185+40-30+35,anchor="nw",text="Driver and Commuter Bus",fill="#4D47C3",font=("Segoe UI", 10,'bold'))
         mainEntryLabelFont= font.Font(family='Segoe UI', size=8, weight='bold')
         mainEntryFont= font.Font(family='Segoe UI', size=8)
@@ -199,10 +203,9 @@ class AdminMainPage:
         delete_driver_bus_button.place(x=531.0+488+60+80+88,y=555.0+20+40+35,width=109.0-30,height=32.0)  
 
         
-        #------------------------------------------------------------- Trees ------------------------------------------------------------        
+        #===================================================================Treeviews===================================================================       
         style = ttk.Style()
 
-        # style.theme_use('clam')
         style.configure('Treeview.Heading', background="#ffffff",foreground="#4D47C3",font=('Segoe UI',8,'bold'))
         
         style.configure('treeRoute.Heading', background="#ffffff",foreground="#4D47C3",font=('Segoe UI',20,'bold'))
@@ -211,15 +214,13 @@ class AdminMainPage:
 
         style.layout("Treeview", [('Treeview.treearea', {'sticky': 'nswe'})])
         style.configure("Vertical.Scrollbar", background="#FFFFFF", bordercolor="#FFFFFF", arrowcolor="#4D47C3")
-        # Add a Treeview widget
-                #-------------------------------------------------------------Tree Trip----------------------------------------------------------------
+        
+       #-------------------------------------------------------------Treeview Trip-----------------------------------------------------------------------
         treeTrip = ttk.Treeview(window, column=( "trip_id","route_id", "driver_id","driver_name","pickup_time","available_seats","trip_status","trip_fee"), show='headings', height=10)
         treeTrip.tag_configure('cell1', background='#ededf9')
         treeTrip.tag_configure('cell2', background='#dbdaf3')
-        # "driver_name",
-        # "pickup_time",
-        # "available_seats",
-        # "trip_fee"
+        treeTrip.tag_configure('cellstart',background='#ebff3b')
+        
         treeTrip.column("trip_id", anchor = CENTER, minwidth=0, width=80,stretch=NO)
         treeTrip.heading("trip_id", text="Trip ID",)
 
@@ -243,18 +244,13 @@ class AdminMainPage:
         treeTrip.column("trip_fee", anchor = CENTER, minwidth=0, width=80,stretch=NO)
         treeTrip.heading("trip_fee", text="Trip Fee",)
 
-        # "pickup_time",
-        # "available_seats",
-        # "trip_fee"
-        
-        getTrips(treeTrip)   #fetching the data
+        getTrips(treeTrip)
 
         treeTrip.place(x=170-165+20,y=50-20-5,width=700,height=300-20)
         scrollTrip = ttk.Scrollbar(window, orient="vertical", command=treeTrip.yview)
         scrollTrip.place(x=868-165+20, y=50-20-5, height=285+15-20)
-
         treeTrip.configure(yscrollcommand=scrollTrip.set)
-                #-------------------------------------------------------------Tree Short Route----------------------------------------------------------------
+        #-------------------------------------------------------------Treeview Route-----------------------------------------------------------------------
         treeRoute = ttk.Treeview(window, column=( "route_id","route_status"), show='headings', height=10)
         treeRoute.tag_configure('cell1', background='#ededf9')
         treeRoute.tag_configure('cell2', background='#dbdaf3')
@@ -267,20 +263,11 @@ class AdminMainPage:
         
         getRoutes(treeRoute)
         treeRoute.place(x=170-165+20,y=300+15,width=175,height=50+20)
-        
-        #---------------------------------------------------------------
-        #---------------------------------------------------------------
-        #---------------------------------------------------------------Driver Commuter Treeview------------------------------------------------------
+        #-------------------------------------------------------------Treeview Driver and Commuter----------------------------------------------------------
         treeDriverBus = ttk.Treeview(window, column=( "driver_id","commuter_bus_id", "driver_name","telephone_number","gender","national_id","driver_license_expiry","license_plate","bus_license_expiry"), show='headings', height=10)
         treeDriverBus.tag_configure('cell1', background='#ededf9')
         treeDriverBus.tag_configure('cell2', background='#dbdaf3')
-        # "driver_id",
-        # "commuter_bus_id",
-        # "driver_name",
-        # "telephone_number",
-        # "driver_license_expiry",
-        # "license_plate",
-        # "bus_license_expiry"
+        
         treeDriverBus.column("driver_id", anchor = CENTER, minwidth=0, width=100,stretch=NO)
         treeDriverBus.heading("driver_id", text="Driver ID",)
 
@@ -314,7 +301,7 @@ class AdminMainPage:
 
         treeDriverBus.configure(yscrollcommand=scrollDriverBus.set)
         getDrivers(treeDriverBus)
-        #------------------------------------------------------------------Clients Tree View-------------------------------------------------------------------
+        #------------------------------------------------------------------Treeview Client-------------------------------------------------------------------
         treeClient = ttk.Treeview(window, column=( "client_id","client_name","telephone_number","email","gender"), show='headings', height=10)
         treeClient.tag_configure('cell1', background='#ededf9')
         treeClient.tag_configure('cell2', background='#dbdaf3')

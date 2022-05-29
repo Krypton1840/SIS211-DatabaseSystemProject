@@ -1,7 +1,4 @@
 from pathlib import Path
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Radiobutton, Toplevel, messagebox,Frame,font
 from login import *
 
@@ -42,13 +39,7 @@ class AdminLoginPage:
             font=("Segoe UI Regular", 15 * -1)
         )
 
-        # userid_entry_image = PhotoImage(
-        #     file=relative_to_assets("userid_entry_image.png"))
-        # userid_entry_bg = canvas.create_image(
-        #     1094.5,
-        #     334.5,
-        #     image=userid_entry_image
-        # )
+
         userid_entry = Entry(
             bd=0,
             bg="#EFEFFF",
@@ -70,14 +61,6 @@ class AdminLoginPage:
             fill="#A7A2FF",
             font=("Segoe UI Regular", 15 * -1)
         )
-
-        # password_entry_image = PhotoImage(
-        #     file=relative_to_assets("password_entry_image.png"))
-        # password_entry_bg = canvas.create_image(
-        #     1094.5,
-        #     432.5,
-        #     image=password_entry_image
-        # )
 
         password_entry = Entry(
             bd=0,
@@ -112,15 +95,6 @@ class AdminLoginPage:
         )
 
         # Log in button
-        # log_in_button_image = PhotoImage(
-        #     file=relative_to_assets("log_in_button_image.png"))
-        # log_in_button = Button(
-        #     image=log_in_button_image,
-        #     borderwidth=0,
-        #     highlightthickness=0,
-        #     command=lambda: attemptAdminLogIn(userid_entry,password_entry),
-        #     relief="flat"
-        # )
         def logInAndRedirect(userid_entry,password_entry):
             id=attemptAdminLogIn(userid_entry,password_entry)
             if id:

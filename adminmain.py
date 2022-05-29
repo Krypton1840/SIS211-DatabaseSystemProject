@@ -3,7 +3,8 @@ from tkinter import messagebox
 from re import *
 from datetime import datetime,timedelta
 from decouple import config
-# Establshing connection with mssql
+
+from adminreport import generateTelephoneNumReportOfCancelled, generateTelephoneNumReportOfRouteInOp
 conn = pyodbc.connect(config('DB_CONNECTION'))
 cursor = conn.cursor()
 
@@ -20,7 +21,14 @@ def generateTrips(tree):
     if(number_of_drivers==0):
         messagebox.showerror("Failed to Generate Trips", "You didn't register any driver")
         return -1;
-    #------------------------------------------------------------------------------------------------------------------------------------------
+    
+    # if there is a trip of status not completed
+    cursor.execute("SELECT COUNT(*) FROM TRIP WHERE TRIPSTATUS='Not Completed'");
+    number_of_not_completed=cursor.fetchone()[0]
+    if(number_of_not_completed>0):
+        messagebox.showerror("Failed to Generate Trips", "You can't generate trips if there are trips of status not completed. Either mark them as completed or cancel them if there is an issue")
+        return -1;
+    
     
     # if there is operative route
     cursor.execute("SELECT COUNT(1) FROM Route WHERE Operative=1")
@@ -116,7 +124,25 @@ def generateTrips(tree):
             drivers_of_O25.append(row);
         elif row[1]=="52O":
             drivers_of_52O.append(row);
+        
+    if(len(drivers_of_52O)==0 and "52O" in operative_routes):
+        messagebox.showwarning("Important Note","There will be no 52O trips as there is no drivers and commuter buses resting at the 5th Settlement station.")
+        
+    if(len(drivers_of_O25)==0 and "O25" in operative_routes):
+        messagebox.showwarning("Important Note","There will be no O25 trips as there is no drivers and commuter buses resting at the 6th October station.")
+    if(len(drivers_of_52O)==0 and "52O" in operative_routes) and (len(drivers_of_O25)==0 and "O25" in operative_routes):
+        return -1;    
     
+    if(0<len(drivers_of_52O)<17 and "52O" in operative_routes):
+        messagebox.showwarning("Important Note","Not all 52O trips from 6:00 to 22:00 will be available due to shortage of drivers and commuter buses resting at the 5th Settlement station. Only "+str(len(drivers_of_52O))+" trips (starting from 6:00) will be available")
+        admin_answer=messagebox.askyesno("","Do you want to proceed and generate only "+str(len(drivers_of_52O))+" 52O trips (starting from 6:00)?")
+        if(admin_answer!=True):
+            return -1;
+    if(0<len(drivers_of_O25)<17 and "O25" in operative_routes):
+        messagebox.showwarning("Important Note","Not all O25 trips from 6:00 to 22:00 will be available due to shortage of drivers and commuter buses resting at the 6th October station. Only "+str(len(drivers_of_O25))+" trips (starting from 6:00) will be available")
+        admin_answer=messagebox.askyesno("","Do you want to proceed and generate only "+str(len(drivers_of_O25))+" O25 trips (starting from 6:00)?")
+        if(admin_answer!=True):
+            return -1;
     trip_pickup_time= datetime.strftime(datetime(1,1,1,starthour,0,0,0),"%H:%M")
     for i in range(17):# Number of trips
         trip_pickup_time
@@ -140,11 +166,12 @@ def cancelTrip(tree):
             values=tree.item(selected_item,'values')
             cursor.execute("""SELECT COUNT(*) FROM (SELECT TRIPID FROM TRIP WHERE TRIPID=? AND TRIPSTATUS='Not Completed') as c""",values[0])
             if(cursor.fetchone()[0]!=0):
-                
+                clientsExists=generateTelephoneNumReportOfCancelled(values[0])
                 cursor.execute("""DELETE FROM TRIP WHERE TRIPID=? AND TRIPSTATUS='Not Completed'
                            """,values[0])
                 cursor.commit()
-                messagebox.showwarning("Note","Please inform the clients that had booked trip "+values[0])
+                if(clientsExists==True):
+                    messagebox.showwarning("Note","A pdf of the clients and their telephone no. that booked trip "+values[0]+" is generated,Please inform the clients of the cancellation")
                 getTrips(tree)
             else:
                 raise ValueError("Trip's status is completed so you can't cancel it")
@@ -193,12 +220,13 @@ def makeRouteInOperative(tree,treeTrip): #route tree
             cursor.execute("""UPDATE ROUTE SET Operative=0 WHERE RouteID=?
                            """,values[0])
             cursor.commit()
-            # ay trip not completed and on that route will be deleted and message box
+            
             cursor.execute("""SELECT COUNT(*) FROM (SELECT TRIPID FROM TRIP WHERE TRIP.ROUTEID=? AND TripStatus='Not Completed')as t;
                            """,values[0])
             count_of_canceled_trips=cursor.fetchone()[0]
             if count_of_canceled_trips!=0:
-                messagebox.showinfo("Note","Please inform the clients that had booked the latest trips on route"+values[0])
+                generateTelephoneNumReportOfRouteInOp(values[0])
+                messagebox.showinfo("Note","A pdf of the cancelled trips and if there are clients that booked trips on route "+values[0]+"(theirs names and telephone no. are added to pdf) is generated,Please inform the clients ,if there are any, of the cancellation")
                 
             cursor.execute("""DELETE FROM TRIP WHERE RouteID=? AND TripStatus='Not Completed'""",values[0])
             cursor.commit()
@@ -212,7 +240,7 @@ def makeRouteInOperative(tree,treeTrip): #route tree
 def getClients(tree): # client tree
            cursor.execute("SELECT COUNT(*) FROM client")
            countOfClients=cursor.fetchone()
-           #ClientID,FirstName,LastName,TelephoneNum,Email,Gender
+           
            cursor.execute('SELECT ClientID,FirstName,LastName,TelephoneNum,Email,Gender from client')
            cell_colors=["cell1","cell2"]
            color_index=0
@@ -250,7 +278,7 @@ def getRoutes(tree):#route tree
 def getTrips(tree):
            cursor.execute("SELECT COUNT(*) FROM trip")
            countOfTrips=cursor.fetchone()
-           cursor.execute('SELECT TripID,RouteID,Trip.DriverID,FirstName,LastName,PickupTime,AvailableSeats,TripStatus,TripFee from trip left join driver on trip.DriverID=driver.DriverID;')
+           cursor.execute('SELECT TripID,RouteID,Trip.DriverID,FirstName,LastName,PickupTime,AvailableSeats,TripStatus,TripFee from trip left join driver on trip.DriverID=driver.DriverID order by TripID;')
            cell_colors=["cell1","cell2"]
            color_index=0
            tree.delete(*tree.get_children())
@@ -259,13 +287,20 @@ def getTrips(tree):
                   tripData=cursor.fetchone()
                   if(tripData):
                     if(not tripData[2]):
-                        tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],"___","___",tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=(cell_colors[color_index]))
+                        if(str(tripData[5])=="06:00:00"):
+                            tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],"___","___",tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=("cellstart"))
+                        else:    
+                            tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],"___","___",tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=(cell_colors[color_index]))
                     else:
-                        tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],tripData[2],tripData[2+1]+" "+tripData[3+1],tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=(cell_colors[color_index]))
+                        if(str(tripData[5])=="06:00:00"):
+                            tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],tripData[2],tripData[2+1]+" "+tripData[3+1],tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=("cellstart"))
+                        else:    
+                            tree.insert('', 'end',text="1", values=(tripData[0],tripData[1],tripData[2],tripData[2+1]+" "+tripData[3+1],tripData[4+1],tripData[5+1],tripData[6+1],tripData[7+1]), tags=(cell_colors[color_index]))
                     if color_index==0:
                            color_index+=1
                     elif color_index==1:
                            color_index-=1;
+           tree.yview_moveto(1)
 def getDrivers(tree):
            cursor.execute("SELECT COUNT(*) FROM driver")
            countOfDrivers=cursor.fetchone()

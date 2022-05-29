@@ -33,12 +33,11 @@ class ClientMainPage:
 
         canvas.place(x = 0, y = 0)
         
-        # x=868-165+95+20, y=50+290+30-20,
         canvas.create_rectangle(0, 384-45+20, 1448, 385-45+20, fill="#d3d3d3", outline = '#d3d3d3')
                 
         style = ttk.Style()
 
-        # style.theme_use('clam')
+        
         style.configure('Treeview.Heading', background="#ffffff",foreground="#4D47C3",font=('Segoe UI',8,'bold'))
         style.configure('Treeview', background="#ffffff",font=('Segoe UI',7))
         # reload button
@@ -62,10 +61,6 @@ class ClientMainPage:
         tripTree.tag_configure('cell1', background='#ededf9')
         tripTree.tag_configure('cell2', background='#dbdaf3')
         
-        # "driver_name",
-        # "pickup_time",
-        # "available_seats",
-        # "trip_fee"
         tripTree.column("trip_id", anchor = CENTER, minwidth=0, width=100,stretch=NO)
         tripTree.heading("trip_id", text="Trip ID",)
 
@@ -87,10 +82,6 @@ class ClientMainPage:
         tripTree.column("trip_fee", anchor = CENTER, minwidth=0, width=100,stretch=NO)
         tripTree.heading("trip_fee", text="Trip Fee",)
 
-        # "pickup_time",
-        # "available_seats",
-        # "trip_fee"
-        
         getTrips(tripTree)   #fetching the data
 
         tripTree.place(x=170-165+20,y=50+290+30-20+10+25+20,width=700,height=300-25)

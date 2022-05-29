@@ -57,8 +57,7 @@ def generateReport():
     
     cursor.execute("SELECT COUNT(*) FROM BOOKS_A")
     pdf.multi_cell(0,5+5+5,"- Total number of Trip bookings: "+str(cursor.fetchone()[0]))
-    
-    cursor
+  
     
     cursor.execute("SELECT COUNT(*) FROM FEEDBACK")
     pdf.multi_cell(0,5+5+5,"- Total number of feedbacks given: "+str(cursor.fetchone()[0]))
@@ -78,6 +77,59 @@ def generateReport():
         pdf.multi_cell(0,5+5+5,"    + Client name: "+row[0]+" "+row[1]+" No. of Trip Bookings= "+str(row[2]))
     
     pdf.output('Report%s.pdf'%time_string, 'F')
+    
+    
+def generateTelephoneNumReportOfCancelled(trip_id):
+    pdf = PDF()
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_font('Times', '',20)
+    # //title
+    pdf.multi_cell(0,5+5,"Trip Cancelled: "+str(trip_id))
+    pdf.set_font('Times', '',14)
+    cursor.execute("""SELECT COUNT(*) FROM (SELECT CLIENT.FIRSTNAME,CLIENT.LASTNAME,CLIENT.TELEPHONENUM FROM 
+                               BOOKS_A INNER JOIN CLIENT ON BOOKS_A.CLIENTID = CLIENT.CLIENTID 
+                               INNER JOIN TRIP ON BOOKS_A.TRIPID =TRIP.TRIPID WHERE BOOKS_A.TRIPID=? AND TRIPSTATUS='Not Completed') as cl""",trip_id)
+    if(cursor.fetchone()[0]==0):
+        return False;
+    cursor.execute("""SELECT CLIENT.FIRSTNAME,CLIENT.LASTNAME,CLIENT.TELEPHONENUM FROM 
+                               BOOKS_A INNER JOIN CLIENT ON BOOKS_A.CLIENTID = CLIENT.CLIENTID 
+                               INNER JOIN TRIP ON BOOKS_A.TRIPID =TRIP.TRIPID WHERE BOOKS_A.TRIPID=? AND TRIPSTATUS='Not Completed'""",trip_id)
+    for row in cursor:
+        pdf.multi_cell(0,5+5,"Client Name : "+row[0]+" "+row[1]+" "+", Telephone no. :"+row[2])
+    pdf.output('cancelledtrip'+str(trip_id)+'.pdf', 'F')
+    return True
+def generateTelephoneNumReportOfRouteInOp(route_id):
+    cursor.execute("""SELECT TRIPID FROM TRIP WHERE TRIP.ROUTEID=? AND TripStatus='Not Completed'""",route_id)
+    pdf = PDF()
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_font('Times', '',20)
+    # //title
+    pdf.multi_cell(0,5+5,"Route: "+str(route_id))
+    arr_trip_id=[]
+    for row in cursor:
+        arr_trip_id.append(row[0])
+        
+    for trip_id in arr_trip_id:
+        pdf.set_font('Times', '',17)
+        # //title
+        pdf.multi_cell(0,5+5,"Trip: "+str(trip_id))
+        pdf.set_font('Times', '',14)
+        cursor.execute("""SELECT COUNT(*) FROM (SELECT CLIENT.FIRSTNAME,CLIENT.LASTNAME,CLIENT.TELEPHONENUM FROM 
+                               BOOKS_A INNER JOIN CLIENT ON BOOKS_A.CLIENTID = CLIENT.CLIENTID 
+                               INNER JOIN TRIP ON BOOKS_A.TRIPID =TRIP.TRIPID WHERE BOOKS_A.TRIPID=? AND TRIPSTATUS='Not Completed') as cl""",trip_id)
+        if(cursor.fetchone()[0]==0):
+            continue
+        cursor.execute("""SELECT CLIENT.FIRSTNAME,CLIENT.LASTNAME,CLIENT.TELEPHONENUM FROM 
+                               BOOKS_A INNER JOIN CLIENT ON BOOKS_A.CLIENTID = CLIENT.CLIENTID 
+                               INNER JOIN TRIP ON BOOKS_A.TRIPID =TRIP.TRIPID WHERE BOOKS_A.TRIPID=? AND TRIPSTATUS='Not Completed'""",trip_id)
+        for client in cursor:
+            pdf.multi_cell(0,5+5,"Client Name : "+client[0]+" "+client[1]+" "+", Telephone no. :"+client[2])
+    pdf.output('cancelledTripsRoute'+str(route_id)+'.pdf', 'F')
+        
+    
+
 
     
 

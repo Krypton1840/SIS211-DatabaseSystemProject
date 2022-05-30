@@ -528,15 +528,27 @@ def deleteDriver(tree,treeTrip):
        values=tree.item(selected_item,'values')
        cursor.execute("SELECT COUNT(*) FROM (SELECT TRIPID FROM TRIP WHERE TRIP.DRIVERID=? AND TRIP.TRIPSTATUS='Not Completed') as t",values[0])
        has_incomplete_trips=True
-       if(cursor.fetchone()[0]==0):
+       count_of_incomplete_trips=cursor.fetchone()[0]
+       
+       cancelled_trip_id=-1
+       report_generation_success=False
+       
+       if(count_of_incomplete_trips==0):
            has_incomplete_trips=False
-       cursor.execute("DELETE TRIP WHERE TRIP.DRIVERID=? AND TRIP.TRIPSTATUS='Not Completed'",values[0])
-       cursor.commit()
+       if(count_of_incomplete_trips==1):
+           has_incomplete_trips=True
+           cursor.execute("SELECT TRIPID FROM TRIP WHERE TRIP.DRIVERID=? AND TRIP.TRIPSTATUS='Not Completed'",values[0])
+           cancelled_trip_id=cursor.fetchone()[0]
+           report_generation_success=generateTelephoneNumReportOfCancelled(cancelled_trip_id)
+    
+           cursor.execute("DELETE TRIP WHERE TRIP.DRIVERID=? AND TRIP.TRIPSTATUS='Not Completed'",values[0])
+           cursor.commit()
        cursor.execute('DELETE DRIVER WHERE DRIVERID=?',values[0])
        cursor.commit()
        cursor.execute("""UPDATE TRIP SET DRIVERID=0 WHERE DRIVERID=? AND TRIPSTATUS='Completed'""",values[0])
-       if(has_incomplete_trips==True):
-           messagebox.showwarning("","Please inform the clients that had booked the latest trip of driver of id: "+values[0]+" (Driver's name: "+values[2]+")")
+       cursor.commit()
+       if(has_incomplete_trips==True and report_generation_success==True and cancelled_trip_id!=-1 and count_of_incomplete_trips==1):
+           messagebox.showwarning("Note","A pdf of the clients and their telephone no. that booked the latest trip of driver of id: "+values[0]+" and the trip is of id: "+str(cancelled_trip_id)+" is generated ,Please inform the clients of the cancellation")
        getDrivers(tree)
        getTrips(treeTrip)
     except Exception as e:

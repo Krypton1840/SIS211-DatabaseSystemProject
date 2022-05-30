@@ -96,7 +96,6 @@ class AdminSignUpPage:
                 import guiadminmain
                 guiadminmain.AdminMainPage(id);
                 
-        # signup_button_image = PhotoImage(file=relative_to_assets("signup_button_image.png"))
         buttonFont = font.Font(family='Segoe UI', size=18, weight='bold')
          
         signup_button = Button(text='Sign Up',bg='#4D47C3',fg='#ffffff',font=buttonFont,borderwidth=0,highlightthickness=0,

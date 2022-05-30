@@ -1,7 +1,4 @@
 from pathlib import Path
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Radiobutton, Toplevel, messagebox,Frame,font
 from re import *
 from viewprofile import * 
@@ -178,7 +175,3 @@ class ViewAdminProfilePage:
         
         window.resizable(False, False)
         window.mainloop()
-
-if __name__ == "__main__":
-    app = ViewAdminProfilePage()
-    #app.mainloop()

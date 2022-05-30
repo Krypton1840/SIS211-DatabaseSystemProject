@@ -1,5 +1,3 @@
-from operator import ge
-from tabnanny import check
 from tkinter import messagebox
 from re import *
 import pyodbc 
@@ -32,13 +30,8 @@ def checkNationalID(input_national_id):
             raise ValueError("Invalid National ID!")
 
 def checkGender(input_gender_entry):
-    if not(input_gender_entry=="Male" or input_gender_entry=="male" or input_gender_entry=="Female" or input_gender_entry=="female" or " "):
+    if not(input_gender_entry=="Male" or input_gender_entry=="Female"):
         raise ValueError("Not a valid input in gender field")
-
-# def checklicenseDate(gender_entry):
-#     if not input_name_entry.isalpha():
-#         raise ValueError(name_entry+" should be alphabet only!")
-
 
 def checkAllClientData(first_name,last_name,email,telephone,gender):
     checkName(first_name,"First Name")
@@ -74,11 +67,7 @@ def formatGender(input_gender_entry):
     
 
 #-----------------------------------------------------client-----------------------------------------------------------------------
-#-----------------------------------------------------client-----------------------------------------------------------------------
-#-----------------------------------------------------client-----------------------------------------------------------------------
-#-----------------------------------------------------client-----------------------------------------------------------------------
-#-----------------------------------------------------client-----------------------------------------------------------------------
-#-----------------------------------------------------client-----------------------------------------------------------------------
+
 def updateClientInDB(first_name,last_name,email,telephone,gender,client_id_passed,password):
     try:
         cursor.execute("UPDATE CLIENT SET FIRSTNAME=?,LASTNAME=?,EMAIL=?,PASSWORD=?,TELEPHONENUM=?,GENDER=? WHERE CLIENTID = ?;",first_name,last_name,email,password,telephone,gender,client_id_passed)
@@ -137,10 +126,8 @@ def SaveClient(firstname_entry,lastname_entry,email_entry,phone_entry,gender_ent
 
  
     try:
-        gender = formatGender(gender)
+        formattedGender = formatGender(gender)
         telephone=formatTelephone(telephone)
-        formattedGender=gender.capitalize()
-        print(formattedGender)
         checkAllClientData(first_name,last_name,email,telephone,formattedGender)
         updateClientInDB(first_name,last_name,email,telephone,formattedGender,client_id_passed,password)
         messagebox.showinfo("Success","Client Data Updated Successfully")
@@ -148,11 +135,7 @@ def SaveClient(firstname_entry,lastname_entry,email_entry,phone_entry,gender_ent
         messagebox.showerror("Update failed",error_message)
 
 #-----------------------------------------------------Admin-----------------------------------------------------------------------
-#-----------------------------------------------------Admin-----------------------------------------------------------------------
-#-----------------------------------------------------Admin-----------------------------------------------------------------------
-#-----------------------------------------------------Admin-----------------------------------------------------------------------
-#-----------------------------------------------------Admin-----------------------------------------------------------------------
-#-----------------------------------------------------Admin-----------------------------------------------------------------------
+
 def updateAdminInDB(first_name,last_name,nationalID,telephone,gender,admin_id_passed,password):
     try:
         cursor.execute("UPDATE ADMIN SET FIRSTNAME=?,LASTNAME=?,NATIONALID=?,PASSWORD=?,TELEPHONENUM=?,GENDER=? WHERE ADMINID = ?;",first_name,last_name,nationalID,password,telephone,gender,admin_id_passed)
@@ -201,13 +184,12 @@ def SaveAdmin(firstname_entry,lastname_entry,nationalID_entry,phone_entry,gender
     if (not((gender_entry.get()).strip())) or gender_entry.get() == " ":
         gender = adminData[4]
     else:
-        gender=gender_entry
+        gender=gender_entry.get()
 
     
     try:
-        gender = formatGender(gender)
+        formattedGender = formatGender(gender)
         telephone=formatTelephone(telephone)
-        formattedGender=gender.capitalize()
         checkAllAdminData(first_name,last_name,nationalID,telephone,formattedGender)
         updateAdminInDB(first_name,last_name,nationalID,telephone,formattedGender,admin_id_passed,password)
         messagebox.showinfo("Success","Admin Data Updated Successfully")

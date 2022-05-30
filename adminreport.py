@@ -1,3 +1,4 @@
+from tkinter import messagebox
 from fpdf import FPDF
 import pyodbc 
 from decouple import config
@@ -77,6 +78,7 @@ def generateReport():
         pdf.multi_cell(0,5+5+5,"    + Client name: "+row[0]+" "+row[1]+" No. of Trip Bookings= "+str(row[2]))
     
     pdf.output('Report%s.pdf'%time_string, 'F')
+    messagebox.showinfo("Note","Generated Report%s successfully"%time_string)
     
     
 def generateTelephoneNumReportOfCancelled(trip_id):

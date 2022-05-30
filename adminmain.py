@@ -316,7 +316,7 @@ def getDrivers(tree):
                            color_index+=1
                     elif color_index==1:
                            color_index-=1;
-def reloadAdminMainPage(treeTrip,treeClient,treeDriverBus):
+def refreshAdminMainPage(treeTrip,treeClient,treeDriverBus):
     getTrips(treeTrip)
     getClients(treeClient)
     getDrivers(treeDriverBus)
@@ -502,6 +502,9 @@ def updateDriver(tree,first_name_entry,last_name_entry,telephone_number_entry,ge
                    license_plate=values[7]               
         if bus_license_expiry.strip()=="": 
                   bus_license_expiry=values[8]
+        telephone_number=formatTelephone(telephone_number)
+        gender=formatGender(gender)
+        checkAllDriverEntries(first_name,last_name,telephone_number,gender,national_id,driver_license_expiry,license_plate,bus_license_expiry)
         cursor.execute(
             ''' UPDATE DRIVER SET FIRSTNAME=?,LASTNAME=?,TELEPHONENUM=?,
             GENDER=?,NATIONALID=?,DRIVERLICENSEEXPIRYDATE=?
@@ -523,12 +526,17 @@ def deleteDriver(tree,treeTrip):
                 raise ValueError("Please select a driver")
        selected_item = tree.selection()[0]
        values=tree.item(selected_item,'values')
+       cursor.execute("SELECT COUNT(*) FROM (SELECT TRIPID FROM TRIP WHERE TRIP.DRIVERID=? AND TRIP.TRIPSTATUS='Not Completed') as t",values[0])
+       has_incomplete_trips=True
+       if(cursor.fetchone()[0]==0):
+           has_incomplete_trips=False
        cursor.execute("DELETE TRIP WHERE TRIP.DRIVERID=? AND TRIP.TRIPSTATUS='Not Completed'",values[0])
        cursor.commit()
        cursor.execute('DELETE DRIVER WHERE DRIVERID=?',values[0])
        cursor.commit()
        cursor.execute("""UPDATE TRIP SET DRIVERID=0 WHERE DRIVERID=? AND TRIPSTATUS='Completed'""",values[0])
-       messagebox.showwarning("","Please inform the clients that had booked the latest trip of driver of id: "+values[0])
+       if(has_incomplete_trips==True):
+           messagebox.showwarning("","Please inform the clients that had booked the latest trip of driver of id: "+values[0]+" (Driver's name: "+values[2]+")")
        getDrivers(tree)
        getTrips(treeTrip)
     except Exception as e:

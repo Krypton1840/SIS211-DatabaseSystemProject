@@ -40,12 +40,9 @@ class ClientMainPage:
         
         style.configure('Treeview.Heading', background="#ffffff",foreground="#4D47C3",font=('Segoe UI',8,'bold'))
         style.configure('Treeview', background="#ffffff",font=('Segoe UI',7))
-        # reload button
-        reload_loaded_image=Image.open(relative_to_assets("reload-button.png"))
-        reload_loaded_image_resized=reload_loaded_image.resize((35-10,30-10))
-        reload_photo = ImageTk.PhotoImage(reload_loaded_image_resized)
-        reload_button = Button(image=reload_photo,borderwidth=0,command=lambda:reloadClientsMainPage(tripTree,bookingTree,client_id),relief="flat")
-        reload_button.place(x=2.5,y=2.5,width=30-10,height=30-10)
+        # refresh button
+        refresh_button = Button(text='Refresh',bg='#018f06',fg='#FAF9F6',font=("Segoe UI", 8,'bold'),borderwidth=0,command=lambda:refreshClientsMainPage(tripTree,bookingTree,client_id),relief="flat")
+        refresh_button.place(x=32,y=2.5,width=109.0-60,height=30-10)
         # Defining fonts
         mainButtonFont= font.Font(family='Segoe UI', size=8, weight='bold')
         mainEntryLabelFont= font.Font(family='Segoe UI', size=8, weight='bold')

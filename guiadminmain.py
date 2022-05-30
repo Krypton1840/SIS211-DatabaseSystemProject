@@ -33,12 +33,9 @@ class AdminMainPage:
         canvas.place(x = 0, y = 0)
         mainButtonFont= font.Font(family='Segoe UI', size=8, weight='bold')
         #-----------------------------------------------------------------------------------------------------------------------------------------------------
-        # Reload/Refresh Button
-        reload_loaded_image=Image.open(relative_to_assets("reload-button.png"))
-        reload_loaded_image_resized=reload_loaded_image.resize((35-10,30-10))
-        reload_photo = ImageTk.PhotoImage(reload_loaded_image_resized)
-        reload_button = Button(image=reload_photo,borderwidth=0,command=lambda:reloadAdminMainPage(treeTrip,treeClient,treeDriverBus),relief="flat")
-        reload_button.place(x=2.5,y=2.5,width=30-10,height=30-10)
+        #refresh button
+        refresh_button = Button(text='Refresh',bg='#018f06',fg='#FAF9F6',font=("Segoe UI", 8,'bold'),borderwidth=0,command=lambda:refreshAdminMainPage(treeTrip,treeClient,treeDriverBus),relief="flat")
+        refresh_button.place(x=32,y=2.5,width=109.0-60,height=30-10)
         
         #===================================================================Components=================================================================== 
         

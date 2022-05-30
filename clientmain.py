@@ -137,6 +137,6 @@ def giveRating(tree,clientId,driver_rate_entry,trip_rate_entry):
     except Exception as e:
         messagebox.showinfo("Failed to give a rating",e)
         
-def reloadClientsMainPage(treeTrip,treeBooking,clientID):
+def refreshClientsMainPage(treeTrip,treeBooking,clientID):
     getTrips(treeTrip)
     getBookings(treeBooking,clientID)

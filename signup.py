@@ -108,7 +108,8 @@ def signUpClient(first_name_entry,last_name_entry,email_entry,password_entry,tel
             messagebox.showinfo("Success","Signed Up Successfully, Welcome "+first_name+" "+last_name)
             print("Log: ",first_name," ",last_name," ",email," ",password," ",telephone)
             cursor.execute("""SELECT CLIENTID FROM CLIENT WHERE EMAIL=? AND PASSWORD=? AND TELEPHONENUM=?""",email,password,telephone)
-            return cursor.fetchone()
+            id = cursor.fetchone()
+            return id[0]
         except ValueError as error_message:
             messagebox.showerror("Sign Up failed",error_message)
 

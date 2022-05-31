@@ -1,7 +1,6 @@
 import pyodbc 
 from tkinter import messagebox
 from re import *
-import datetime
 from decouple import config
 # Establshing connection with mssql
 conn = pyodbc.connect(config('DB_CONNECTION'))

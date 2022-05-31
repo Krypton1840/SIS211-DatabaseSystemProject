@@ -1,4 +1,3 @@
-from tkinter import messagebox
 from re import *
 import pyodbc 
 from decouple import config

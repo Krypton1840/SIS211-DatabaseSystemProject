@@ -1,16 +1,6 @@
 from tkinter import *
 from tkinter import ttk, Button, Label,font
 from clientmain import *
-from pathlib import Path
-from PIL import Image, ImageTk
-
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
-
-
-    
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
    
 class ClientMainPage:
     def __init__(self,id):

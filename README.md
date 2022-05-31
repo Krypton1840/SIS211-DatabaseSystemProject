@@ -3,7 +3,13 @@
 ### Team members:
 
 `Mostafa Ibrahim Abdellatif `-`Youssef Mohamed Emam`-`Youssef Magdi Salah Eldin` 
+### How to run:
 
+In the source code directory run: `python gui.py`
+
+#### Modules used:
+
+- `tkinter`, `pyodbc` ,`fpdf` ,`python-decouple`
 ### Features:
 
 ##### For Both Admins and Clients:

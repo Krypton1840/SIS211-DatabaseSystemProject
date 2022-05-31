@@ -89,7 +89,6 @@ def bookTrip(tree,clientId,booking_id,numOfSeats):
             raise ValueError("Cannot book a completed trip")
     except Exception as e:
         if(str(e)=="Cannot book a completed trip" or str(e)=="Trip already booked." or str(e)=="The available seats in this trip is not enough." or str(e)=="Please select a Trip"):
-            print(e)
             messagebox.showinfo("Booking failed",e)
 
 def deleteBooking(tree,clientId):

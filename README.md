@@ -84,7 +84,7 @@
 
 Admin's main page:
 
-![image](https://user-images.githubusercontent.com/78238174/171257228-2f5ffbd8-baed-43dc-a61b-94194829d59c.png)
+![image](https://user-images.githubusercontent.com/78238174/171266172-2a70c54a-4d06-4eeb-ba1b-544257e7c402.png)
 
 
 

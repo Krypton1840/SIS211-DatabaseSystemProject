@@ -2,9 +2,7 @@
 
 ### Team members:
 
-`Mostafa Ibrahim Abdellatif `  `Youssef Mohamed Emam`  `Youssef Magdi Salah Eldin` 
-
-`Omar Ahmed Badr`  `Ahmed Mohamed Mokhtar`
+`Mostafa Ibrahim Abdellatif `-`Youssef Mohamed Emam`-`Youssef Magdi Salah Eldin` 
 
 ### Features:
 
@@ -58,7 +56,7 @@
 
 
 
-![image-20220531172728007](C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531172728007.png)
+![image](https://user-images.githubusercontent.com/78238174/171256693-ef2d3143-dfe4-4d51-a1b1-f294afbfbf3a.png)
 
 ---
 
@@ -70,9 +68,9 @@
 
 
 
-![image-20220531173426842](C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531173426842.png)
+![image](https://user-images.githubusercontent.com/78238174/171257095-ebc786b4-638d-4d26-a963-570ffa5893c7.png)
 
-![image-20220531183413464](C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531183413464.png)
+![image](https://user-images.githubusercontent.com/78238174/171257164-9bf5c996-3c79-4a69-9488-6de9c0f187b1.png)
 
 ---
 
@@ -86,13 +84,13 @@
 
 Admin's main page:
 
-![image-20220531182619031](C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531182619031.png)
+![image](https://user-images.githubusercontent.com/78238174/171257228-2f5ffbd8-baed-43dc-a61b-94194829d59c.png)
 
 
 
 Client's main page:
 
-![image-20220531182411482](C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531182411482.png)
+![image](https://user-images.githubusercontent.com/78238174/171257390-9a5d62cb-6665-40ea-bc8b-89ce53bd93b1.png)
 
 ---
 
@@ -106,9 +104,9 @@ Client's main page:
 
 View profile:
 
-<img src="C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531182851686.png" alt="image-20220531182851686" style="zoom:60%;" />
+![image](https://user-images.githubusercontent.com/78238174/171257440-bb8e8804-238b-4157-a085-1729eec8586f.png)
 
-<img src="C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531183108560.png" alt="image-20220531183108560" style="zoom:60%;" />
+![image](https://user-images.githubusercontent.com/78238174/171257469-f31769d1-df82-4ed4-a00e-6e353c30f9c3.png)
 
 
 
@@ -118,6 +116,6 @@ View profile:
 
 Edit profile:
 
-<img src="C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531182929260.png" alt="image-20220531182929260" style="zoom:60%;" />
+![image](https://user-images.githubusercontent.com/78238174/171257495-ecdc3f9a-c31f-4ba5-bc01-2f042a638028.png)
 
-<img src="C:\Users\corvus\AppData\Roaming\Typora\typora-user-images\image-20220531183150937.png" alt="image-20220531183150937" style="zoom:60%;" />
+![image](https://user-images.githubusercontent.com/78238174/171257515-638f1fa1-5491-434b-806f-13526451f566.png)
